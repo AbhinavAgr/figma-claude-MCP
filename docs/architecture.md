@@ -462,7 +462,7 @@ figma-console-mcp/
 │   │   ├── websocket-server.ts           # Local WebSocket server
 │   │   └── figma-connector.ts            # IFigmaConnector interface
 │   └── types/                            # TypeScript definitions
-├── figma-desktop-bridge/
+├── figma-claude-connect/
 │   ├── code.js                           # Plugin worker (Figma API access)
 │   ├── ui.html                           # Plugin UI (local + cloud mode)
 │   └── manifest.json                     # Plugin manifest

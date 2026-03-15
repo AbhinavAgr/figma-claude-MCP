@@ -10,7 +10,7 @@
  * suitable for local IDE integrations and development workflows.
  *
  * Requirements:
- * - Desktop Bridge plugin open in Figma (Plugins → Development → Figma Desktop Bridge)
+ * - Figma Claude Connect plugin open in Figma (Plugins → Development → Figma Claude Connect)
  * - FIGMA_ACCESS_TOKEN environment variable for API access
  */
 
@@ -229,7 +229,7 @@ If Design Systems Assistant MCP is not available, install it from: https://githu
 		const wsPort = this.wsActualPort || this.wsPreferredPort || DEFAULT_WS_PORT;
 		throw new Error(
 			"Cannot connect to Figma Desktop.\n\n" +
-			"Open the Desktop Bridge plugin in Figma (Plugins → Development → Figma Desktop Bridge).\n" +
+			"Open the Figma Claude Connect plugin in Figma (Plugins → Development → Figma Claude Connect).\n" +
 			`The plugin will connect automatically to ws://localhost:${wsPort}.\n` +
 			"No special launch flags needed."
 		);
@@ -275,7 +275,7 @@ If Design Systems Assistant MCP is not available, install it from: https://githu
 			// The user may open the plugin later
 			logger.warn(
 				`WebSocket transport not available yet.\n\n` +
-				`Open the Desktop Bridge plugin in Figma (Plugins → Development → Figma Desktop Bridge).\n` +
+				`Open the Figma Claude Connect plugin in Figma (Plugins → Development → Figma Claude Connect).\n` +
 				`No special launch flags needed — the plugin connects automatically.`,
 			);
 		}
@@ -288,9 +288,9 @@ If Design Systems Assistant MCP is not available, install it from: https://githu
 	private getPluginPath(): string | null {
 		try {
 			const thisFile = fileURLToPath(import.meta.url);
-			// From dist/local.js → go up to package root, then into figma-desktop-bridge
+			// From dist/local.js → go up to package root, then into figma-claude-connect
 			const packageRoot = dirname(dirname(thisFile));
-			const manifestPath = resolve(packageRoot, "figma-desktop-bridge", "manifest.json");
+			const manifestPath = resolve(packageRoot, "figma-claude-connect", "manifest.json");
 			return existsSync(manifestPath) ? manifestPath : null;
 		} catch {
 			return null;
@@ -1326,7 +1326,7 @@ If Design Systems Assistant MCP is not available, install it from: https://githu
 														fix: "Close some of the other Claude Desktop tabs or terminal sessions running the MCP server, then restart this one.",
 													}
 													: {
-														instructions: `Open the Desktop Bridge plugin in Figma (Plugins → Development → Figma Desktop Bridge). No special launch flags needed.${this.getPluginPath() ? ' Plugin manifest: ' + this.getPluginPath() : ''}`,
+														instructions: `Open the Figma Claude Connect plugin in Figma (Plugins → Development → Figma Claude Connect). No special launch flags needed.${this.getPluginPath() ? ' Plugin manifest: ' + this.getPluginPath() : ''}`,
 													}
 												: undefined,
 											ai_instruction: !setupValid
@@ -1413,7 +1413,7 @@ If Design Systems Assistant MCP is not available, install it from: https://githu
 					if (transport === "none") {
 						throw new Error(
 							"Cannot connect to Figma Desktop.\n\n" +
-							"Open the Desktop Bridge plugin in Figma (Plugins → Development → Figma Desktop Bridge)."
+							"Open the Figma Claude Connect plugin in Figma (Plugins → Development → Figma Claude Connect)."
 						);
 					}
 
@@ -5754,12 +5754,12 @@ if (currentFile === entryFile) {
 	// Handle --print-path: print the Desktop Bridge manifest path and exit
 	if (process.argv.includes("--print-path")) {
 		const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-		const manifestPath = resolve(packageRoot, "figma-desktop-bridge", "manifest.json");
+		const manifestPath = resolve(packageRoot, "figma-claude-connect", "manifest.json");
 		if (existsSync(manifestPath)) {
 			console.log(manifestPath);
 			process.exit(0);
 		} else {
-			console.error("figma-desktop-bridge/manifest.json not found at:", manifestPath);
+			console.error("figma-claude-connect/manifest.json not found at:", manifestPath);
 			process.exit(1);
 		}
 	}

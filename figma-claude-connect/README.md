@@ -1,4 +1,4 @@
-# Figma Desktop Bridge
+# Figma Claude Connect
 
 A Figma plugin that bridges the Variables API and Component descriptions to MCP (Model Context Protocol) clients without requiring an Enterprise plan. Supports both local MCP servers and cloud relay connections from web-based AI clients.
 
@@ -45,10 +45,10 @@ For cloud mode, the plugin connects to a Cloudflare Durable Object relay via a o
 
 1. **Open Figma Desktop**
 2. **Go to Plugins → Development → Import plugin from manifest...**
-3. **Navigate to:** `/path/to/figma-console-mcp/figma-desktop-bridge/manifest.json`
+3. **Navigate to:** `/path/to/figma-console-mcp/figma-claude-connect/manifest.json`
 4. **Click "Open"**
 
-The plugin will appear in your Development plugins list as "Figma Desktop Bridge".
+The plugin will appear in your Development plugins list as "Figma Claude Connect".
 
 ### Manual Installation
 
@@ -56,7 +56,7 @@ Alternatively, you can install from the plugin directory:
 
 ```bash
 # From the figma-console-mcp directory
-cd figma-desktop-bridge
+cd figma-claude-connect
 
 # Figma will use these files:
 # - manifest.json (plugin configuration)
@@ -69,7 +69,7 @@ cd figma-desktop-bridge
 ### Running the Plugin
 
 1. **Open your Figma file** with variables and/or components
-2. **Run the plugin:** Right-click → Plugins → Development → Figma Desktop Bridge
+2. **Run the plugin:** Right-click → Plugins → Development → Figma Claude Connect
 3. **Wait for confirmation:** Plugin UI will show "✓ Desktop Bridge active"
 
 The plugin will:
@@ -236,7 +236,7 @@ The Desktop Bridge plugin supports connecting to **multiple MCP server instances
 If you imported the Desktop Bridge plugin **before v1.10.0**, you need to re-import the manifest once to enable multi-port scanning:
 
 1. In Figma: **Plugins → Development → Import plugin from manifest...**
-2. Select the `manifest.json` file from the `figma-desktop-bridge` directory
+2. Select the `manifest.json` file from the `figma-claude-connect` directory
 3. Run the plugin — it will now scan all ports and connect to all servers
 
 > **Why?** Figma caches plugin files at the application level. Simply restarting the plugin does NOT reload the code from disk. You must re-import the manifest to force Figma to pick up the new multi-port scanning logic.
@@ -247,7 +247,7 @@ Without re-importing, the old plugin code only connects to port 9223. If your se
 
 ### File Structure
 ```
-figma-desktop-bridge/
+figma-claude-connect/
 ├── manifest.json    # Plugin configuration
 ├── code.js          # Plugin worker (accesses Figma API)
 ├── ui.html          # Plugin UI (stores/requests data for MCP access)

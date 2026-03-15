@@ -197,7 +197,7 @@ Using Claude.ai, v0, Replit, or Lovable? Get full write access ((45 tools)) with
 
 <Steps>
   <Step title="Run the Desktop Bridge Plugin">
-    Open the plugin in Figma Desktop (Plugins → Development → Figma Desktop Bridge)
+    Open the plugin in Figma Desktop (Plugins → Development → Figma Claude Connect)
   </Step>
   <Step title="Tell Your AI to Connect">
     Say "Connect to my Figma plugin" — your AI generates a 6-character pairing code

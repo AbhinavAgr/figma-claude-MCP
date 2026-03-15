@@ -187,15 +187,15 @@ The Desktop Bridge Plugin connects via WebSocket — no special Figma launch fla
 
 1. **Open Figma Desktop** (normal launch, no special flags)
 2. Go to **Plugins** → **Development** → **Import plugin from manifest...**
-3. Navigate to the `figma-desktop-bridge/manifest.json` file in the figma-console-mcp directory
+3. Navigate to the `figma-claude-connect/manifest.json` file in the figma-console-mcp directory
    - **NPX users:** Run `npx figma-console-mcp@latest --print-path` to find the directory
 4. Click **"Open"** — the plugin appears in your Development plugins list
-5. **Run the plugin** in your Figma file (Plugins → Development → Figma Desktop Bridge)
+5. **Run the plugin** in your Figma file (Plugins → Development → Figma Claude Connect)
 6. The plugin auto-connects via WebSocket (scans ports 9223–9232) — you'll see a "Connected" indicator
 
 > **One-time setup.** Once imported, the plugin stays in your Development plugins list. Just run it whenever you want to use the MCP. No need to restart Figma with special flags.
 
-**📖 [Desktop Bridge Plugin Documentation](https://github.com/southleft/figma-console-mcp/tree/main/figma-desktop-bridge)**
+**📖 [Desktop Bridge Plugin Documentation](https://github.com/southleft/figma-console-mcp/tree/main/figma-claude-connect)**
 
 #### Multi-Instance / Port Conflicts
 
@@ -367,7 +367,7 @@ Then restart Claude Desktop.
 2. **Your AI generates a 6-character pairing code** (expires in 5 minutes)
 
 3. **In Figma Desktop:**
-   - Open the Desktop Bridge plugin (Plugins → Development → Figma Desktop Bridge)
+   - Open the Desktop Bridge plugin (Plugins → Development → Figma Claude Connect)
    - Toggle **"Cloud Mode"** in the plugin UI
    - Enter the pairing code
    - Click **Connect**
@@ -595,7 +595,7 @@ Start a new thread in Codex and try:
 Use the Figma Console connector to check Figma status
 ```
 
-If the Desktop Bridge plugin isn't running yet, the server will connect but report that Figma Desktop isn't linked. Run the plugin in your Figma file (Plugins → Development → Figma Desktop Bridge) and ask Codex to check again.
+If the Desktop Bridge plugin isn't running yet, the server will connect but report that Figma Desktop isn't linked. Run the plugin in your Figma file (Plugins → Development → Figma Claude Connect) and ask Codex to check again.
 
 ### Equivalent JSON Config
 
@@ -619,7 +619,7 @@ For reference, the Codex GUI fields map directly to the [NPX JSON configuration]
 | NPX using old version | Cached package | Use `figma-console-mcp@latest` explicitly |
 | Cloud pairing code expired | Code is older than 5 minutes | Ask your AI to generate a new pairing code |
 | Cloud connection drops between turns | Relay session ended | Re-pair by asking your AI to reconnect, then enter the new code in the plugin |
-| Cloud Mode toggle not showing | Outdated Desktop Bridge plugin | Re-import the latest `figma-desktop-bridge/manifest.json` in Figma |
+| Cloud Mode toggle not showing | Outdated Desktop Bridge plugin | Re-import the latest `figma-claude-connect/manifest.json` in Figma |
 
 ### Node.js Version Issues
 
@@ -708,7 +708,7 @@ If you set up before v1.10.0, add `"ENABLE_MCP_APPS": "true"` to the `env` secti
 
 1. **Try example prompts:** See [Use Cases](use-cases) for workflow examples
 2. **Explore all tools:** See [Tools Reference](tools) for the complete tool list
-3. **Learn about the Desktop Bridge plugin:** See [Desktop Bridge README](https://github.com/southleft/figma-console-mcp/tree/main/figma-desktop-bridge) for advanced configuration
+3. **Learn about the Desktop Bridge plugin:** See [Desktop Bridge README](https://github.com/southleft/figma-console-mcp/tree/main/figma-claude-connect) for advanced configuration
 
 ---
 

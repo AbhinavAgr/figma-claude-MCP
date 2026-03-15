@@ -1,13 +1,13 @@
-// Figma Desktop Bridge - MCP Plugin
+// Figma Claude Connect - MCP Plugin
 // Bridges Figma API to MCP clients via plugin UI window
 // Supports: Variables, Components, Styles, and more
 // Uses postMessage to communicate with UI, bypassing worker sandbox limitations
 // Puppeteer can access UI iframe's window context to retrieve data
 
-console.log('🌉 [Desktop Bridge] Plugin loaded and ready');
+console.log('🔗 [Claude Connect] Plugin loaded and ready');
 
 // Show minimal UI - compact status indicator
-figma.showUI(__html__, { width: 140, height: 50, visible: true, themeColors: true });
+figma.showUI(__html__, { width: 260, height: 68, visible: true, themeColors: true });
 
 // ============================================================================
 // CONSOLE CAPTURE — Intercept console.* in the QuickJS sandbox and forward
@@ -65,13 +65,13 @@ figma.showUI(__html__, { width: 140, height: 50, visible: true, themeColors: tru
 // Immediately fetch and send variables data to UI
 (async () => {
   try {
-    console.log('🌉 [Desktop Bridge] Fetching variables...');
+    console.log('🌉 [Claude Connect] Fetching variables...');
 
     // Get all local variables and collections
     const variables = await figma.variables.getLocalVariablesAsync();
     const collections = await figma.variables.getLocalVariableCollectionsAsync();
 
-    console.log(`🌉 [Desktop Bridge] Found ${variables.length} variables in ${collections.length} collections`);
+    console.log(`🌉 [Claude Connect] Found ${variables.length} variables in ${collections.length} collections`);
 
     // Format the data
     const variablesData = {
@@ -105,11 +105,11 @@ figma.showUI(__html__, { width: 140, height: 50, visible: true, themeColors: tru
       data: variablesData
     });
 
-    console.log('🌉 [Desktop Bridge] Variables data sent to UI successfully');
-    console.log('🌉 [Desktop Bridge] UI iframe now has variables data accessible via window.__figmaVariablesData');
+    console.log('🌉 [Claude Connect] Variables data sent to UI successfully');
+    console.log('🌉 [Claude Connect] UI iframe now has variables data accessible via window.__figmaVariablesData');
 
   } catch (error) {
-    console.error('🌉 [Desktop Bridge] Error fetching variables:', error);
+    console.error('🌉 [Claude Connect] Error fetching variables:', error);
     figma.ui.postMessage({
       type: 'ERROR',
       error: error.message || String(error)
@@ -194,7 +194,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   if (msg.type === 'EXECUTE_CODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Executing code, length:', msg.code.length);
+      console.log('🌉 [Claude Connect] Executing code, length:', msg.code.length);
 
       // Use eval with async IIFE wrapper instead of AsyncFunction constructor
       // AsyncFunction is restricted in Figma's plugin sandbox, but eval works
@@ -204,7 +204,7 @@ figma.ui.onmessage = async (msg) => {
       // This allows async/await in user code while using eval
       var wrappedCode = "(async function() {\n" + msg.code + "\n})()";
 
-      console.log('🌉 [Desktop Bridge] Wrapped code for eval');
+      console.log('🌉 [Claude Connect] Wrapped code for eval');
 
       // Execute with timeout
       var timeoutMs = msg.timeout || 5000;
@@ -221,7 +221,7 @@ figma.ui.onmessage = async (msg) => {
       } catch (syntaxError) {
         // Log the actual syntax error message
         var syntaxErrorMsg = syntaxError && syntaxError.message ? syntaxError.message : String(syntaxError);
-        console.error('🌉 [Desktop Bridge] Syntax error in code:', syntaxErrorMsg);
+        console.error('🌉 [Claude Connect] Syntax error in code:', syntaxErrorMsg);
         figma.ui.postMessage({
           type: 'EXECUTE_CODE_RESULT',
           requestId: msg.requestId,
@@ -236,7 +236,7 @@ figma.ui.onmessage = async (msg) => {
         timeoutPromise
       ]);
 
-      console.log('🌉 [Desktop Bridge] Code executed successfully, result type:', typeof result);
+      console.log('🌉 [Claude Connect] Code executed successfully, result type:', typeof result);
 
       // Analyze result for potential silent failures
       var resultAnalysis = {
@@ -270,7 +270,7 @@ figma.ui.onmessage = async (msg) => {
       }
 
       if (resultAnalysis.warning) {
-        console.warn('🌉 [Desktop Bridge] ⚠️ Result warning:', resultAnalysis.warning);
+        console.warn('🌉 [Claude Connect] ⚠️ Result warning:', resultAnalysis.warning);
       }
 
       figma.ui.postMessage({
@@ -293,9 +293,9 @@ figma.ui.onmessage = async (msg) => {
       var errorStack = error && error.stack ? error.stack : '';
 
       // Log error details as strings so they show up properly in Puppeteer
-      console.error('🌉 [Desktop Bridge] Code execution error: [' + errorName + '] ' + errorMsg);
+      console.error('🌉 [Claude Connect] Code execution error: [' + errorName + '] ' + errorMsg);
       if (errorStack) {
-        console.error('🌉 [Desktop Bridge] Stack:', errorStack);
+        console.error('🌉 [Claude Connect] Stack:', errorStack);
       }
 
       figma.ui.postMessage({
@@ -312,7 +312,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'UPDATE_VARIABLE') {
     try {
-      console.log('🌉 [Desktop Bridge] Updating variable:', msg.variableId);
+      console.log('🌉 [Claude Connect] Updating variable:', msg.variableId);
 
       var variable = await figma.variables.getVariableByIdAsync(msg.variableId);
       if (!variable) {
@@ -329,7 +329,7 @@ figma.ui.onmessage = async (msg) => {
           type: 'VARIABLE_ALIAS',
           id: value
         };
-        console.log('🌉 [Desktop Bridge] Converting to variable alias:', value.id);
+        console.log('🌉 [Claude Connect] Converting to variable alias:', value.id);
       } else if (variable.resolvedType === 'COLOR' && typeof value === 'string') {
         // Convert hex string to Figma color
         value = hexToFigmaRGB(value);
@@ -338,7 +338,7 @@ figma.ui.onmessage = async (msg) => {
       // Set the value for the specified mode
       variable.setValueForMode(msg.modeId, value);
 
-      console.log('🌉 [Desktop Bridge] Variable updated successfully');
+      console.log('🌉 [Claude Connect] Variable updated successfully');
 
       figma.ui.postMessage({
         type: 'UPDATE_VARIABLE_RESULT',
@@ -348,7 +348,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Update variable error:', error);
+      console.error('🌉 [Claude Connect] Update variable error:', error);
       figma.ui.postMessage({
         type: 'UPDATE_VARIABLE_RESULT',
         requestId: msg.requestId,
@@ -363,7 +363,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'CREATE_VARIABLE') {
     try {
-      console.log('🌉 [Desktop Bridge] Creating variable:', msg.name);
+      console.log('🌉 [Claude Connect] Creating variable:', msg.name);
 
       // Get the collection
       var collection = await figma.variables.getVariableCollectionByIdAsync(msg.collectionId);
@@ -396,7 +396,7 @@ figma.ui.onmessage = async (msg) => {
         variable.scopes = msg.scopes;
       }
 
-      console.log('🌉 [Desktop Bridge] Variable created:', variable.id);
+      console.log('🌉 [Claude Connect] Variable created:', variable.id);
 
       figma.ui.postMessage({
         type: 'CREATE_VARIABLE_RESULT',
@@ -406,7 +406,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Create variable error:', error);
+      console.error('🌉 [Claude Connect] Create variable error:', error);
       figma.ui.postMessage({
         type: 'CREATE_VARIABLE_RESULT',
         requestId: msg.requestId,
@@ -421,7 +421,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'CREATE_VARIABLE_COLLECTION') {
     try {
-      console.log('🌉 [Desktop Bridge] Creating collection:', msg.name);
+      console.log('🌉 [Claude Connect] Creating collection:', msg.name);
 
       // Create the collection
       var collection = figma.variables.createVariableCollection(msg.name);
@@ -438,7 +438,7 @@ figma.ui.onmessage = async (msg) => {
         }
       }
 
-      console.log('🌉 [Desktop Bridge] Collection created:', collection.id);
+      console.log('🌉 [Claude Connect] Collection created:', collection.id);
 
       figma.ui.postMessage({
         type: 'CREATE_VARIABLE_COLLECTION_RESULT',
@@ -448,7 +448,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Create collection error:', error);
+      console.error('🌉 [Claude Connect] Create collection error:', error);
       figma.ui.postMessage({
         type: 'CREATE_VARIABLE_COLLECTION_RESULT',
         requestId: msg.requestId,
@@ -463,7 +463,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'DELETE_VARIABLE') {
     try {
-      console.log('🌉 [Desktop Bridge] Deleting variable:', msg.variableId);
+      console.log('🌉 [Claude Connect] Deleting variable:', msg.variableId);
 
       var variable = await figma.variables.getVariableByIdAsync(msg.variableId);
       if (!variable) {
@@ -477,7 +477,7 @@ figma.ui.onmessage = async (msg) => {
 
       variable.remove();
 
-      console.log('🌉 [Desktop Bridge] Variable deleted');
+      console.log('🌉 [Claude Connect] Variable deleted');
 
       figma.ui.postMessage({
         type: 'DELETE_VARIABLE_RESULT',
@@ -487,7 +487,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Delete variable error:', error);
+      console.error('🌉 [Claude Connect] Delete variable error:', error);
       figma.ui.postMessage({
         type: 'DELETE_VARIABLE_RESULT',
         requestId: msg.requestId,
@@ -502,7 +502,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'DELETE_VARIABLE_COLLECTION') {
     try {
-      console.log('🌉 [Desktop Bridge] Deleting collection:', msg.collectionId);
+      console.log('🌉 [Claude Connect] Deleting collection:', msg.collectionId);
 
       var collection = await figma.variables.getVariableCollectionByIdAsync(msg.collectionId);
       if (!collection) {
@@ -517,7 +517,7 @@ figma.ui.onmessage = async (msg) => {
 
       collection.remove();
 
-      console.log('🌉 [Desktop Bridge] Collection deleted');
+      console.log('🌉 [Claude Connect] Collection deleted');
 
       figma.ui.postMessage({
         type: 'DELETE_VARIABLE_COLLECTION_RESULT',
@@ -527,7 +527,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Delete collection error:', error);
+      console.error('🌉 [Claude Connect] Delete collection error:', error);
       figma.ui.postMessage({
         type: 'DELETE_VARIABLE_COLLECTION_RESULT',
         requestId: msg.requestId,
@@ -542,7 +542,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'RENAME_VARIABLE') {
     try {
-      console.log('🌉 [Desktop Bridge] Renaming variable:', msg.variableId, 'to', msg.newName);
+      console.log('🌉 [Claude Connect] Renaming variable:', msg.variableId, 'to', msg.newName);
 
       var variable = await figma.variables.getVariableByIdAsync(msg.variableId);
       if (!variable) {
@@ -552,7 +552,7 @@ figma.ui.onmessage = async (msg) => {
       var oldName = variable.name;
       variable.name = msg.newName;
 
-      console.log('🌉 [Desktop Bridge] Variable renamed from "' + oldName + '" to "' + msg.newName + '"');
+      console.log('🌉 [Claude Connect] Variable renamed from "' + oldName + '" to "' + msg.newName + '"');
 
       var serializedVar = serializeVariable(variable);
       serializedVar.oldName = oldName;
@@ -565,7 +565,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Rename variable error:', error);
+      console.error('🌉 [Claude Connect] Rename variable error:', error);
       figma.ui.postMessage({
         type: 'RENAME_VARIABLE_RESULT',
         requestId: msg.requestId,
@@ -580,7 +580,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_VARIABLE_DESCRIPTION') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting description on variable:', msg.variableId);
+      console.log('🌉 [Claude Connect] Setting description on variable:', msg.variableId);
 
       var variable = await figma.variables.getVariableByIdAsync(msg.variableId);
       if (!variable) {
@@ -589,7 +589,7 @@ figma.ui.onmessage = async (msg) => {
 
       variable.description = msg.description || '';
 
-      console.log('🌉 [Desktop Bridge] Variable description set successfully');
+      console.log('🌉 [Claude Connect] Variable description set successfully');
 
       figma.ui.postMessage({
         type: 'SET_VARIABLE_DESCRIPTION_RESULT',
@@ -600,7 +600,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set variable description error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set variable description error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_VARIABLE_DESCRIPTION_RESULT',
         requestId: msg.requestId,
@@ -615,7 +615,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'ADD_MODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Adding mode to collection:', msg.collectionId);
+      console.log('🌉 [Claude Connect] Adding mode to collection:', msg.collectionId);
 
       var collection = await figma.variables.getVariableCollectionByIdAsync(msg.collectionId);
       if (!collection) {
@@ -625,7 +625,7 @@ figma.ui.onmessage = async (msg) => {
       // Add the mode (returns the new mode ID)
       var newModeId = collection.addMode(msg.modeName);
 
-      console.log('🌉 [Desktop Bridge] Mode "' + msg.modeName + '" added with ID:', newModeId);
+      console.log('🌉 [Claude Connect] Mode "' + msg.modeName + '" added with ID:', newModeId);
 
       figma.ui.postMessage({
         type: 'ADD_MODE_RESULT',
@@ -639,7 +639,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Add mode error:', error);
+      console.error('🌉 [Claude Connect] Add mode error:', error);
       figma.ui.postMessage({
         type: 'ADD_MODE_RESULT',
         requestId: msg.requestId,
@@ -654,7 +654,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'RENAME_MODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Renaming mode:', msg.modeId, 'in collection:', msg.collectionId);
+      console.log('🌉 [Claude Connect] Renaming mode:', msg.modeId, 'in collection:', msg.collectionId);
 
       var collection = await figma.variables.getVariableCollectionByIdAsync(msg.collectionId);
       if (!collection) {
@@ -670,7 +670,7 @@ figma.ui.onmessage = async (msg) => {
       var oldName = currentMode.name;
       collection.renameMode(msg.modeId, msg.newName);
 
-      console.log('🌉 [Desktop Bridge] Mode renamed from "' + oldName + '" to "' + msg.newName + '"');
+      console.log('🌉 [Claude Connect] Mode renamed from "' + oldName + '" to "' + msg.newName + '"');
 
       var serializedCol = serializeCollection(collection);
       serializedCol.oldName = oldName;
@@ -683,7 +683,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Rename mode error:', error);
+      console.error('🌉 [Claude Connect] Rename mode error:', error);
       figma.ui.postMessage({
         type: 'RENAME_MODE_RESULT',
         requestId: msg.requestId,
@@ -698,7 +698,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'REFRESH_VARIABLES') {
     try {
-      console.log('🌉 [Desktop Bridge] Refreshing variables data...');
+      console.log('🌉 [Claude Connect] Refreshing variables data...');
 
       var variables = await figma.variables.getLocalVariablesAsync();
       var collections = await figma.variables.getLocalVariableCollectionsAsync();
@@ -725,10 +725,10 @@ figma.ui.onmessage = async (msg) => {
         data: variablesData
       });
 
-      console.log('🌉 [Desktop Bridge] Variables refreshed:', variables.length, 'variables in', collections.length, 'collections');
+      console.log('🌉 [Claude Connect] Variables refreshed:', variables.length, 'variables in', collections.length, 'collections');
 
     } catch (error) {
-      console.error('🌉 [Desktop Bridge] Refresh variables error:', error);
+      console.error('🌉 [Claude Connect] Refresh variables error:', error);
       figma.ui.postMessage({
         type: 'REFRESH_VARIABLES_RESULT',
         requestId: msg.requestId,
@@ -743,7 +743,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'GET_COMPONENT') {
     try {
-      console.log(`🌉 [Desktop Bridge] Fetching component: ${msg.nodeId}`);
+      console.log(`🌉 [Claude Connect] Fetching component: ${msg.nodeId}`);
 
       const node = await figma.getNodeByIdAsync(msg.nodeId);
 
@@ -791,7 +791,7 @@ figma.ui.onmessage = async (msg) => {
         }
       };
 
-      console.log(`🌉 [Desktop Bridge] Component data ready. Has description: ${!!componentData.component.description}, annotations: ${componentData.component.annotations.length}`);
+      console.log(`🌉 [Claude Connect] Component data ready. Has description: ${!!componentData.component.description}, annotations: ${componentData.component.annotations.length}`);
 
       // Send to UI
       figma.ui.postMessage({
@@ -801,7 +801,7 @@ figma.ui.onmessage = async (msg) => {
       });
 
     } catch (error) {
-      console.error(`🌉 [Desktop Bridge] Error fetching component:`, error);
+      console.error(`🌉 [Claude Connect] Error fetching component:`, error);
       figma.ui.postMessage({
         type: 'COMPONENT_ERROR',
         requestId: msg.requestId,
@@ -815,7 +815,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'GET_LOCAL_COMPONENTS') {
     try {
-      console.log('🌉 [Desktop Bridge] Fetching all local components for manifest...');
+      console.log('🌉 [Claude Connect] Fetching all local components for manifest...');
 
       // Find all component sets and standalone components in the file
       var components = [];
@@ -949,7 +949,7 @@ figma.ui.onmessage = async (msg) => {
       }
 
       // Load all pages first (required before accessing children)
-      console.log('🌉 [Desktop Bridge] Loading all pages...');
+      console.log('🌉 [Claude Connect] Loading all pages...');
       await figma.loadAllPagesAsync();
 
       // Process pages in batches with event loop yields to prevent UI freeze
@@ -958,7 +958,7 @@ figma.ui.onmessage = async (msg) => {
       var PAGE_BATCH_SIZE = 3;  // Process 3 pages at a time
       var totalPages = pages.length;
 
-      console.log('🌉 [Desktop Bridge] Processing ' + totalPages + ' pages in batches of ' + PAGE_BATCH_SIZE + '...');
+      console.log('🌉 [Claude Connect] Processing ' + totalPages + ' pages in batches of ' + PAGE_BATCH_SIZE + '...');
 
       for (var pageIndex = 0; pageIndex < totalPages; pageIndex += PAGE_BATCH_SIZE) {
         var batchEnd = Math.min(pageIndex + PAGE_BATCH_SIZE, totalPages);
@@ -974,7 +974,7 @@ figma.ui.onmessage = async (msg) => {
 
         // Log progress for large files
         if (totalPages > PAGE_BATCH_SIZE) {
-          console.log('🌉 [Desktop Bridge] Processed pages ' + (pageIndex + 1) + '-' + batchEnd + ' of ' + totalPages + ' (found ' + components.length + ' components so far)');
+          console.log('🌉 [Claude Connect] Processed pages ' + (pageIndex + 1) + '-' + batchEnd + ' of ' + totalPages + ' (found ' + components.length + ' components so far)');
         }
 
         // Yield to event loop between batches to prevent UI freeze and allow cancellation
@@ -983,7 +983,7 @@ figma.ui.onmessage = async (msg) => {
         }
       }
 
-      console.log('🌉 [Desktop Bridge] Found ' + components.length + ' components and ' + componentSets.length + ' component sets');
+      console.log('🌉 [Claude Connect] Found ' + components.length + ' components and ' + componentSets.length + ' component sets');
 
       figma.ui.postMessage({
         type: 'GET_LOCAL_COMPONENTS_RESULT',
@@ -1003,7 +1003,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Get local components error:', errorMsg);
+      console.error('🌉 [Claude Connect] Get local components error:', errorMsg);
       figma.ui.postMessage({
         type: 'GET_LOCAL_COMPONENTS_RESULT',
         requestId: msg.requestId,
@@ -1018,7 +1018,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'INSTANTIATE_COMPONENT') {
     try {
-      console.log('🌉 [Desktop Bridge] Instantiating component:', msg.componentKey || msg.nodeId);
+      console.log('🌉 [Claude Connect] Instantiating component:', msg.componentKey || msg.nodeId);
 
       var component = null;
       var instance = null;
@@ -1028,7 +1028,7 @@ figma.ui.onmessage = async (msg) => {
         try {
           component = await figma.importComponentByKeyAsync(msg.componentKey);
         } catch (importError) {
-          console.log('🌉 [Desktop Bridge] Not a published component, trying local...');
+          console.log('🌉 [Claude Connect] Not a published component, trying local...');
         }
       }
 
@@ -1049,14 +1049,14 @@ figma.ui.onmessage = async (msg) => {
                 }
               }
               var targetVariantName = variantParts.join(', ');
-              console.log('🌉 [Desktop Bridge] Looking for variant:', targetVariantName);
+              console.log('🌉 [Claude Connect] Looking for variant:', targetVariantName);
 
               // Find matching variant
               for (var i = 0; i < node.children.length; i++) {
                 var child = node.children[i];
                 if (child.type === 'COMPONENT' && child.name === targetVariantName) {
                   component = child;
-                  console.log('🌉 [Desktop Bridge] Found exact variant match');
+                  console.log('🌉 [Claude Connect] Found exact variant match');
                   break;
                 }
               }
@@ -1078,7 +1078,7 @@ figma.ui.onmessage = async (msg) => {
                     }
                     if (matches) {
                       component = child;
-                      console.log('🌉 [Desktop Bridge] Found partial variant match:', child.name);
+                      console.log('🌉 [Claude Connect] Found partial variant match:', child.name);
                       break;
                     }
                   }
@@ -1089,7 +1089,7 @@ figma.ui.onmessage = async (msg) => {
             // Default to first variant if no match
             if (!component && node.children && node.children.length > 0) {
               component = node.children[0];
-              console.log('🌉 [Desktop Bridge] Using default variant:', component.name);
+              console.log('🌉 [Claude Connect] Using default variant:', component.name);
             }
           }
         }
@@ -1135,7 +1135,7 @@ figma.ui.onmessage = async (msg) => {
             try {
               instance.setProperties({ [propName]: msg.overrides[propName] });
             } catch (propError) {
-              console.warn('🌉 [Desktop Bridge] Could not set property ' + propName + ':', propError.message);
+              console.warn('🌉 [Claude Connect] Could not set property ' + propName + ':', propError.message);
             }
           }
         }
@@ -1146,7 +1146,7 @@ figma.ui.onmessage = async (msg) => {
         try {
           instance.setProperties(msg.variant);
         } catch (variantError) {
-          console.warn('🌉 [Desktop Bridge] Could not set variant:', variantError.message);
+          console.warn('🌉 [Claude Connect] Could not set variant:', variantError.message);
         }
       }
 
@@ -1158,7 +1158,7 @@ figma.ui.onmessage = async (msg) => {
         }
       }
 
-      console.log('🌉 [Desktop Bridge] Component instantiated:', instance.id);
+      console.log('🌉 [Claude Connect] Component instantiated:', instance.id);
 
       figma.ui.postMessage({
         type: 'INSTANTIATE_COMPONENT_RESULT',
@@ -1176,7 +1176,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Instantiate component error:', errorMsg);
+      console.error('🌉 [Claude Connect] Instantiate component error:', errorMsg);
       figma.ui.postMessage({
         type: 'INSTANTIATE_COMPONENT_RESULT',
         requestId: msg.requestId,
@@ -1191,7 +1191,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_NODE_DESCRIPTION') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting description on node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Setting description on node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1209,7 +1209,7 @@ figma.ui.onmessage = async (msg) => {
         node.descriptionMarkdown = msg.descriptionMarkdown;
       }
 
-      console.log('🌉 [Desktop Bridge] Description set successfully');
+      console.log('🌉 [Claude Connect] Description set successfully');
 
       figma.ui.postMessage({
         type: 'SET_NODE_DESCRIPTION_RESULT',
@@ -1220,7 +1220,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set description error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set description error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_NODE_DESCRIPTION_RESULT',
         requestId: msg.requestId,
@@ -1235,7 +1235,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'ADD_COMPONENT_PROPERTY') {
     try {
-      console.log('🌉 [Desktop Bridge] Adding component property:', msg.propertyName, 'type:', msg.propertyType);
+      console.log('🌉 [Claude Connect] Adding component property:', msg.propertyName, 'type:', msg.propertyType);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1260,7 +1260,7 @@ figma.ui.onmessage = async (msg) => {
       // Use msg.propertyType (not msg.type which is the message type 'ADD_COMPONENT_PROPERTY')
       var propertyNameWithId = node.addComponentProperty(msg.propertyName, msg.propertyType, msg.defaultValue, options);
 
-      console.log('🌉 [Desktop Bridge] Property added:', propertyNameWithId);
+      console.log('🌉 [Claude Connect] Property added:', propertyNameWithId);
 
       figma.ui.postMessage({
         type: 'ADD_COMPONENT_PROPERTY_RESULT',
@@ -1271,7 +1271,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Add component property error:', errorMsg);
+      console.error('🌉 [Claude Connect] Add component property error:', errorMsg);
       figma.ui.postMessage({
         type: 'ADD_COMPONENT_PROPERTY_RESULT',
         requestId: msg.requestId,
@@ -1286,7 +1286,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'EDIT_COMPONENT_PROPERTY') {
     try {
-      console.log('🌉 [Desktop Bridge] Editing component property:', msg.propertyName);
+      console.log('🌉 [Claude Connect] Editing component property:', msg.propertyName);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1299,7 +1299,7 @@ figma.ui.onmessage = async (msg) => {
 
       var propertyNameWithId = node.editComponentProperty(msg.propertyName, msg.newValue);
 
-      console.log('🌉 [Desktop Bridge] Property edited:', propertyNameWithId);
+      console.log('🌉 [Claude Connect] Property edited:', propertyNameWithId);
 
       figma.ui.postMessage({
         type: 'EDIT_COMPONENT_PROPERTY_RESULT',
@@ -1310,7 +1310,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Edit component property error:', errorMsg);
+      console.error('🌉 [Claude Connect] Edit component property error:', errorMsg);
       figma.ui.postMessage({
         type: 'EDIT_COMPONENT_PROPERTY_RESULT',
         requestId: msg.requestId,
@@ -1325,7 +1325,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'DELETE_COMPONENT_PROPERTY') {
     try {
-      console.log('🌉 [Desktop Bridge] Deleting component property:', msg.propertyName);
+      console.log('🌉 [Claude Connect] Deleting component property:', msg.propertyName);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1338,7 +1338,7 @@ figma.ui.onmessage = async (msg) => {
 
       node.deleteComponentProperty(msg.propertyName);
 
-      console.log('🌉 [Desktop Bridge] Property deleted');
+      console.log('🌉 [Claude Connect] Property deleted');
 
       figma.ui.postMessage({
         type: 'DELETE_COMPONENT_PROPERTY_RESULT',
@@ -1348,7 +1348,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Delete component property error:', errorMsg);
+      console.error('🌉 [Claude Connect] Delete component property error:', errorMsg);
       figma.ui.postMessage({
         type: 'DELETE_COMPONENT_PROPERTY_RESULT',
         requestId: msg.requestId,
@@ -1363,7 +1363,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'RESIZE_NODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Resizing node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Resizing node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1380,7 +1380,7 @@ figma.ui.onmessage = async (msg) => {
         node.resizeWithoutConstraints(msg.width, msg.height);
       }
 
-      console.log('🌉 [Desktop Bridge] Node resized to:', msg.width, 'x', msg.height);
+      console.log('🌉 [Claude Connect] Node resized to:', msg.width, 'x', msg.height);
 
       figma.ui.postMessage({
         type: 'RESIZE_NODE_RESULT',
@@ -1391,7 +1391,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Resize node error:', errorMsg);
+      console.error('🌉 [Claude Connect] Resize node error:', errorMsg);
       figma.ui.postMessage({
         type: 'RESIZE_NODE_RESULT',
         requestId: msg.requestId,
@@ -1406,7 +1406,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'MOVE_NODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Moving node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Moving node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1420,7 +1420,7 @@ figma.ui.onmessage = async (msg) => {
       node.x = msg.x;
       node.y = msg.y;
 
-      console.log('🌉 [Desktop Bridge] Node moved to:', msg.x, ',', msg.y);
+      console.log('🌉 [Claude Connect] Node moved to:', msg.x, ',', msg.y);
 
       figma.ui.postMessage({
         type: 'MOVE_NODE_RESULT',
@@ -1431,7 +1431,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Move node error:', errorMsg);
+      console.error('🌉 [Claude Connect] Move node error:', errorMsg);
       figma.ui.postMessage({
         type: 'MOVE_NODE_RESULT',
         requestId: msg.requestId,
@@ -1446,7 +1446,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_NODE_FILLS') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting fills on node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Setting fills on node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1473,7 +1473,7 @@ figma.ui.onmessage = async (msg) => {
 
       node.fills = processedFills;
 
-      console.log('🌉 [Desktop Bridge] Fills set successfully');
+      console.log('🌉 [Claude Connect] Fills set successfully');
 
       figma.ui.postMessage({
         type: 'SET_NODE_FILLS_RESULT',
@@ -1484,7 +1484,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set fills error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set fills error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_NODE_FILLS_RESULT',
         requestId: msg.requestId,
@@ -1500,7 +1500,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_IMAGE_FILL') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting image fill, bytes:', msg.imageBytes.length);
+      console.log('🌉 [Claude Connect] Setting image fill, bytes:', msg.imageBytes.length);
 
       // Convert the plain array back to Uint8Array
       var bytes = new Uint8Array(msg.imageBytes);
@@ -1529,7 +1529,7 @@ figma.ui.onmessage = async (msg) => {
         }
       }
 
-      console.log('🌉 [Desktop Bridge] Image fill applied to', updatedCount, 'node(s), hash:', imageHash);
+      console.log('🌉 [Claude Connect] Image fill applied to', updatedCount, 'node(s), hash:', imageHash);
 
       figma.ui.postMessage({
         type: 'SET_IMAGE_FILL_RESULT',
@@ -1542,7 +1542,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set image fill error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set image fill error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_IMAGE_FILL_RESULT',
         requestId: msg.requestId,
@@ -1557,7 +1557,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_NODE_STROKES') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting strokes on node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Setting strokes on node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1587,7 +1587,7 @@ figma.ui.onmessage = async (msg) => {
         node.strokeWeight = msg.strokeWeight;
       }
 
-      console.log('🌉 [Desktop Bridge] Strokes set successfully');
+      console.log('🌉 [Claude Connect] Strokes set successfully');
 
       figma.ui.postMessage({
         type: 'SET_NODE_STROKES_RESULT',
@@ -1598,7 +1598,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set strokes error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set strokes error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_NODE_STROKES_RESULT',
         requestId: msg.requestId,
@@ -1613,7 +1613,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_NODE_OPACITY') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting opacity on node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Setting opacity on node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1626,7 +1626,7 @@ figma.ui.onmessage = async (msg) => {
 
       node.opacity = Math.max(0, Math.min(1, msg.opacity));
 
-      console.log('🌉 [Desktop Bridge] Opacity set to:', node.opacity);
+      console.log('🌉 [Claude Connect] Opacity set to:', node.opacity);
 
       figma.ui.postMessage({
         type: 'SET_NODE_OPACITY_RESULT',
@@ -1637,7 +1637,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set opacity error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set opacity error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_NODE_OPACITY_RESULT',
         requestId: msg.requestId,
@@ -1652,7 +1652,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_NODE_CORNER_RADIUS') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting corner radius on node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Setting corner radius on node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1665,7 +1665,7 @@ figma.ui.onmessage = async (msg) => {
 
       node.cornerRadius = msg.radius;
 
-      console.log('🌉 [Desktop Bridge] Corner radius set to:', msg.radius);
+      console.log('🌉 [Claude Connect] Corner radius set to:', msg.radius);
 
       figma.ui.postMessage({
         type: 'SET_NODE_CORNER_RADIUS_RESULT',
@@ -1676,7 +1676,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set corner radius error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set corner radius error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_NODE_CORNER_RADIUS_RESULT',
         requestId: msg.requestId,
@@ -1691,7 +1691,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'CLONE_NODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Cloning node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Cloning node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1704,7 +1704,7 @@ figma.ui.onmessage = async (msg) => {
 
       var clonedNode = node.clone();
 
-      console.log('🌉 [Desktop Bridge] Node cloned:', clonedNode.id);
+      console.log('🌉 [Claude Connect] Node cloned:', clonedNode.id);
 
       figma.ui.postMessage({
         type: 'CLONE_NODE_RESULT',
@@ -1715,7 +1715,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Clone node error:', errorMsg);
+      console.error('🌉 [Claude Connect] Clone node error:', errorMsg);
       figma.ui.postMessage({
         type: 'CLONE_NODE_RESULT',
         requestId: msg.requestId,
@@ -1730,7 +1730,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'DELETE_NODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Deleting node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Deleting node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1741,7 +1741,7 @@ figma.ui.onmessage = async (msg) => {
 
       node.remove();
 
-      console.log('🌉 [Desktop Bridge] Node deleted');
+      console.log('🌉 [Claude Connect] Node deleted');
 
       figma.ui.postMessage({
         type: 'DELETE_NODE_RESULT',
@@ -1752,7 +1752,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Delete node error:', errorMsg);
+      console.error('🌉 [Claude Connect] Delete node error:', errorMsg);
       figma.ui.postMessage({
         type: 'DELETE_NODE_RESULT',
         requestId: msg.requestId,
@@ -1767,7 +1767,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'RENAME_NODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Renaming node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Renaming node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1777,7 +1777,7 @@ figma.ui.onmessage = async (msg) => {
       var oldName = node.name;
       node.name = msg.newName;
 
-      console.log('🌉 [Desktop Bridge] Node renamed from "' + oldName + '" to "' + msg.newName + '"');
+      console.log('🌉 [Claude Connect] Node renamed from "' + oldName + '" to "' + msg.newName + '"');
 
       figma.ui.postMessage({
         type: 'RENAME_NODE_RESULT',
@@ -1788,7 +1788,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Rename node error:', errorMsg);
+      console.error('🌉 [Claude Connect] Rename node error:', errorMsg);
       figma.ui.postMessage({
         type: 'RENAME_NODE_RESULT',
         requestId: msg.requestId,
@@ -1803,7 +1803,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_TEXT_CONTENT') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting text content on node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Setting text content on node:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -1824,7 +1824,7 @@ figma.ui.onmessage = async (msg) => {
         node.fontSize = msg.fontSize;
       }
 
-      console.log('🌉 [Desktop Bridge] Text content set');
+      console.log('🌉 [Claude Connect] Text content set');
 
       figma.ui.postMessage({
         type: 'SET_TEXT_CONTENT_RESULT',
@@ -1835,7 +1835,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set text content error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set text content error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_TEXT_CONTENT_RESULT',
         requestId: msg.requestId,
@@ -1850,7 +1850,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'CREATE_CHILD_NODE') {
     try {
-      console.log('🌉 [Desktop Bridge] Creating child node of type:', msg.nodeType);
+      console.log('🌉 [Claude Connect] Creating child node of type:', msg.nodeType);
 
       var parent = await figma.getNodeByIdAsync(msg.parentId);
       if (!parent) {
@@ -1926,7 +1926,7 @@ figma.ui.onmessage = async (msg) => {
       // Add to parent
       parent.appendChild(newNode);
 
-      console.log('🌉 [Desktop Bridge] Child node created:', newNode.id);
+      console.log('🌉 [Claude Connect] Child node created:', newNode.id);
 
       figma.ui.postMessage({
         type: 'CREATE_CHILD_NODE_RESULT',
@@ -1945,7 +1945,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Create child node error:', errorMsg);
+      console.error('🌉 [Claude Connect] Create child node error:', errorMsg);
       figma.ui.postMessage({
         type: 'CREATE_CHILD_NODE_RESULT',
         requestId: msg.requestId,
@@ -1961,7 +1961,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'CAPTURE_SCREENSHOT') {
     try {
-      console.log('🌉 [Desktop Bridge] Capturing screenshot for node:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Capturing screenshot for node:', msg.nodeId);
 
       var node = msg.nodeId ? await figma.getNodeByIdAsync(msg.nodeId) : figma.currentPage;
       if (!node) {
@@ -1994,7 +1994,7 @@ figma.ui.onmessage = async (msg) => {
         bounds = node.absoluteBoundingBox;
       }
 
-      console.log('🌉 [Desktop Bridge] Screenshot captured:', bytes.length, 'bytes');
+      console.log('🌉 [Claude Connect] Screenshot captured:', bytes.length, 'bytes');
 
       figma.ui.postMessage({
         type: 'CAPTURE_SCREENSHOT_RESULT',
@@ -2016,7 +2016,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Screenshot capture error:', errorMsg);
+      console.error('🌉 [Claude Connect] Screenshot capture error:', errorMsg);
       figma.ui.postMessage({
         type: 'CAPTURE_SCREENSHOT_RESULT',
         requestId: msg.requestId,
@@ -2057,27 +2057,12 @@ figma.ui.onmessage = async (msg) => {
   }
 
   // ============================================================================
-  // RESIZE_UI - Dynamically resize the plugin window (e.g., Cloud Mode toggle)
-  // ============================================================================
-  else if (msg.type === 'RESIZE_UI') {
-    figma.ui.resize(msg.width || 120, msg.height || 36);
-  }
-
-  // ============================================================================
-  // STORE_CLOUD_CONFIG - Persist cloud pairing config in clientStorage
-  // ============================================================================
-  else if (msg.type === 'STORE_CLOUD_CONFIG') {
-    figma.clientStorage.setAsync('cloudConfig', { code: msg.code, timestamp: Date.now() })
-      .catch(function() { /* non-critical */ });
-  }
-
-  // ============================================================================
   // RELOAD_UI - Reload the plugin UI iframe (re-establishes WebSocket connection)
   // Uses figma.showUI(__html__) to reload without restarting code.js
   // ============================================================================
   else if (msg.type === 'RELOAD_UI') {
     try {
-      console.log('🌉 [Desktop Bridge] Reloading plugin UI');
+      console.log('🔗 [Claude Connect] Reloading plugin UI');
       figma.ui.postMessage({
         type: 'RELOAD_UI_RESULT',
         requestId: msg.requestId,
@@ -2085,7 +2070,7 @@ figma.ui.onmessage = async (msg) => {
       });
       // Short delay to let the response message be sent before reload
       setTimeout(function() {
-        figma.showUI(__html__, { width: 140, height: 50, visible: true, themeColors: true });
+        figma.showUI(__html__, { width: 260, height: 68, visible: true, themeColors: true });
       }, 100);
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
@@ -2104,7 +2089,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'SET_INSTANCE_PROPERTIES') {
     try {
-      console.log('🌉 [Desktop Bridge] Setting instance properties on:', msg.nodeId);
+      console.log('🌉 [Claude Connect] Setting instance properties on:', msg.nodeId);
 
       var node = await figma.getNodeByIdAsync(msg.nodeId);
       if (!node) {
@@ -2120,7 +2105,7 @@ figma.ui.onmessage = async (msg) => {
 
       // Get current properties for reference
       var currentProps = node.componentProperties;
-      console.log('🌉 [Desktop Bridge] Current properties:', JSON.stringify(Object.keys(currentProps)));
+      console.log('🌉 [Claude Connect] Current properties:', JSON.stringify(Object.keys(currentProps)));
 
       // Build the properties object
       // Note: TEXT, BOOLEAN, INSTANCE_SWAP properties use the format "PropertyName#nodeId"
@@ -2134,7 +2119,7 @@ figma.ui.onmessage = async (msg) => {
         // Check if this exact property name exists
         if (currentProps[propName] !== undefined) {
           propsToSet[propName] = newValue;
-          console.log('🌉 [Desktop Bridge] Setting property:', propName, '=', newValue);
+          console.log('🌉 [Claude Connect] Setting property:', propName, '=', newValue);
         } else {
           // Try to find a matching property with a suffix (for TEXT/BOOLEAN/INSTANCE_SWAP)
           var foundMatch = false;
@@ -2142,14 +2127,14 @@ figma.ui.onmessage = async (msg) => {
             // Check if this is the base property name with a node ID suffix
             if (existingProp.startsWith(propName + '#')) {
               propsToSet[existingProp] = newValue;
-              console.log('🌉 [Desktop Bridge] Found suffixed property:', existingProp, '=', newValue);
+              console.log('🌉 [Claude Connect] Found suffixed property:', existingProp, '=', newValue);
               foundMatch = true;
               break;
             }
           }
 
           if (!foundMatch) {
-            console.warn('🌉 [Desktop Bridge] Property not found:', propName, '- Available:', Object.keys(currentProps).join(', '));
+            console.warn('🌉 [Claude Connect] Property not found:', propName, '- Available:', Object.keys(currentProps).join(', '));
           }
         }
       }
@@ -2164,7 +2149,7 @@ figma.ui.onmessage = async (msg) => {
       // Get updated properties
       var updatedProps = node.componentProperties;
 
-      console.log('🌉 [Desktop Bridge] Instance properties updated');
+      console.log('🌉 [Claude Connect] Instance properties updated');
 
       figma.ui.postMessage({
         type: 'SET_INSTANCE_PROPERTIES_RESULT',
@@ -2187,7 +2172,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Set instance properties error:', errorMsg);
+      console.error('🌉 [Claude Connect] Set instance properties error:', errorMsg);
       figma.ui.postMessage({
         type: 'SET_INSTANCE_PROPERTIES_RESULT',
         requestId: msg.requestId,
@@ -2202,7 +2187,7 @@ figma.ui.onmessage = async (msg) => {
   // ============================================================================
   else if (msg.type === 'LINT_DESIGN') {
     try {
-      console.log('🌉 [Desktop Bridge] Running design lint...');
+      console.log('🌉 [Claude Connect] Running design lint...');
 
       // ---- Helper functions ----
 
@@ -2705,7 +2690,7 @@ figma.ui.onmessage = async (msg) => {
         responseData.warning = 'Showing first ' + maxFindings + ' findings...';
       }
 
-      console.log('🌉 [Desktop Bridge] Lint complete: ' + summaryObj.total + ' findings across ' + nodesScanned + ' nodes');
+      console.log('🌉 [Claude Connect] Lint complete: ' + summaryObj.total + ' findings across ' + nodesScanned + ' nodes');
 
       figma.ui.postMessage({
         type: 'LINT_DESIGN_RESULT',
@@ -2716,7 +2701,7 @@ figma.ui.onmessage = async (msg) => {
 
     } catch (error) {
       var errorMsg = error && error.message ? error.message : String(error);
-      console.error('🌉 [Desktop Bridge] Lint design error:', errorMsg);
+      console.error('🌉 [Claude Connect] Lint design error:', errorMsg);
       figma.ui.postMessage({
         type: 'LINT_DESIGN_RESULT',
         requestId: msg.requestId,
@@ -2806,13 +2791,13 @@ figma.loadAllPagesAsync().then(function() {
     });
   });
 
-  console.log('🌉 [Desktop Bridge] Document change, selection, and page listeners registered');
+  console.log('🌉 [Claude Connect] Document change, selection, and page listeners registered');
 }).catch(function(err) {
-  console.warn('🌉 [Desktop Bridge] Could not register event listeners:', err);
+  console.warn('🌉 [Claude Connect] Could not register event listeners:', err);
 });
 
-console.log('🌉 [Desktop Bridge] Ready to handle component requests');
-console.log('🌉 [Desktop Bridge] Plugin will stay open until manually closed');
+console.log('🌉 [Claude Connect] Ready to handle component requests');
+console.log('🌉 [Claude Connect] Plugin will stay open until manually closed');
 
 // Plugin stays open - no auto-close
 // UI iframe remains accessible for Puppeteer to read data from window object

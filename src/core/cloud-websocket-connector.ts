@@ -3,7 +3,7 @@
  *
  * Implements IFigmaConnector by routing commands through the PluginRelayDO
  * Durable Object. Each method maps to a command sent via fetch() RPC to
- * the relay, which forwards it to the Figma Desktop Bridge plugin over
+ * the relay, which forwards it to the Figma Claude Connect plugin over
  * WebSocket.
  *
  * Structurally mirrors WebSocketConnector — same methods, different transport.

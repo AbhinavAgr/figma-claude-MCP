@@ -44,6 +44,11 @@ export class LocalBrowserManager implements IBrowserManager {
 		const { debugHost, debugPort } = this.config;
 		const browserURL = `http://${debugHost}:${debugPort}`;
 
+		logger.warn(
+			{ browserURL },
+			'[SECURITY] Falling back to legacy CDP connector — WebSocket Desktop Bridge plugin is not active. ' +
+			'Keep the Desktop Bridge plugin open in Figma to avoid this fallback.',
+		);
 		logger.info({ browserURL }, 'Connecting to Figma Desktop');
 
 		try {
@@ -67,8 +72,8 @@ export class LocalBrowserManager implements IBrowserManager {
 
 			throw new Error(
 				`Failed to connect to Figma Desktop.\n\n` +
-				`Please open the Desktop Bridge plugin in Figma:\n` +
-				`  Plugins → Development → Figma Desktop Bridge\n\n` +
+				`Please open the Figma Claude Connect plugin in Figma:\n` +
+				`  Plugins → Development → Figma Claude Connect\n\n` +
 				`Error: ${error instanceof Error ? error.message : String(error)}`
 			);
 		}

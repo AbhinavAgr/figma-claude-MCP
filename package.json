@@ -10,7 +10,7 @@
 	},
 	"files": [
 		"dist",
-		"figma-desktop-bridge",
+		"figma-claude-connect",
 		"README.md",
 		"LICENSE"
 	],

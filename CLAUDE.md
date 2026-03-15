@@ -2,6 +2,10 @@
 
 The most comprehensive MCP server for Figma — design tokens, components, variables, and programmatic design creation.
 
+## Design Workflow
+
+**MANDATORY**: When creating or modifying ANY design in Figma (components, layouts, UI screens, design systems, tokens, etc.), ALWAYS invoke the `ui-ux-pro-max` skill BEFORE starting. Use it to guide design decisions, visual hierarchy, spacing, color, typography, and UX best practices throughout the entire design process.
+
 ## Build & Test
 
 ```bash

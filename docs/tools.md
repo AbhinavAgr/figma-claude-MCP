@@ -1868,7 +1868,7 @@ figma_delete_comment({
 
 ### `figma_pair_plugin`
 
-Generate a pairing code to connect the Figma Desktop Bridge plugin to the cloud relay. This enables write operations from web-based AI clients.
+Generate a pairing code to connect the Figma Claude Connect plugin to the cloud relay. This enables write operations from web-based AI clients.
 
 **Mode:** Cloud only (available on `/mcp` endpoint)
 

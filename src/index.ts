@@ -891,7 +891,7 @@ export class FigmaConsoleMCPv3 extends McpAgent {
 		// ================================================================
 		this.server.tool(
 			"figma_pair_plugin",
-			"Pair the Figma Desktop Bridge plugin to this cloud session for write access. Returns a 6-character code the user enters in the plugin's Cloud Mode section.",
+			"Pair the Figma Claude Connect plugin to this cloud session for write access. Returns a 6-character code the user enters in the plugin's Cloud Mode section.",
 			{},
 			async () => {
 				try {
@@ -1225,7 +1225,7 @@ export default {
 			// ================================================================
 			statelessServer.tool(
 				"figma_pair_plugin",
-				"Pair the Figma Desktop Bridge plugin to this cloud session for write access. Returns a 6-character code the user enters in the plugin's Cloud Mode section.",
+				"Pair the Figma Claude Connect plugin to this cloud session for write access. Returns a 6-character code the user enters in the plugin's Cloud Mode section.",
 				{},
 				async () => {
 					try {

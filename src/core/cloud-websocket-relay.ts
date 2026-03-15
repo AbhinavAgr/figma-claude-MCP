@@ -1,7 +1,7 @@
 /**
  * Cloud WebSocket Relay — Durable Object
  *
- * Bridges the Figma Desktop Bridge plugin to the cloud MCP server.
+ * Bridges the Figma Claude Connect plugin to the cloud MCP server.
  * The plugin connects via WebSocket (hibernation-aware); the MCP DO
  * sends commands via fetch() RPC and receives responses.
  *

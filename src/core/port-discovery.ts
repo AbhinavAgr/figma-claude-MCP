@@ -25,7 +25,7 @@
  *   External tools read port files for discovery
  */
 
-import { writeFileSync, readFileSync, unlinkSync, existsSync, readdirSync } from 'fs';
+import { writeFileSync, readFileSync, unlinkSync, existsSync, readdirSync, chmodSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { createChildLogger } from './logger.js';
@@ -103,6 +103,7 @@ export function advertisePort(port: number, host: string = 'localhost'): void {
   const filePath = getPortFilePath(port);
   try {
     writeFileSync(filePath, JSON.stringify(data, null, 2));
+    chmodSync(filePath, 0o600); // Owner read/write only — prevents other local users from discovering the port
     logger.info({ port, filePath }, 'Port advertised');
   } catch (error) {
     logger.warn({ port, filePath, error }, 'Failed to write port advertisement file');
@@ -124,6 +125,7 @@ export function refreshPortAdvertisement(port: number): void {
     if (data.pid !== process.pid) return;
     data.lastSeen = new Date().toISOString();
     writeFileSync(filePath, JSON.stringify(data, null, 2));
+    chmodSync(filePath, 0o600); // Re-apply on every heartbeat write in case umask reset it
   } catch {
     // Best-effort — heartbeat failures are non-fatal
   }

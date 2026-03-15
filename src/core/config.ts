@@ -36,7 +36,11 @@ const DEFAULT_CONFIG: ServerConfig = {
     args: [
       '--disable-blink-features=AutomationControlled',
       '--disable-dev-shm-usage',
-      '--no-sandbox', // Note: Only use in trusted environments
+      // SECURITY WARNING: --no-sandbox disables Chrome's OS-level renderer isolation.
+      // This is only reached when the WebSocket Desktop Bridge plugin is unavailable
+      // and the legacy CDP fallback is used. Keep the Desktop Bridge plugin active to
+      // avoid this code path entirely. Never run this in shared/untrusted environments.
+      '--no-sandbox',
     ],
   },
   console: {

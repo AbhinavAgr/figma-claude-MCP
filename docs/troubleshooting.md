@@ -52,7 +52,7 @@ Restart Claude Code (`/mcp` to reconnect) — mcp-remote will open a browser for
 >
 > 1. Open Figma Desktop normally (no special flags needed)
 > 2. Go to **Plugins → Development → Import plugin from manifest...**
-> 3. Select `figma-desktop-bridge/manifest.json` from the figma-console-mcp directory
+> 3. Select `figma-claude-connect/manifest.json` from the figma-console-mcp directory
 > 4. Run the plugin in your Figma file — it auto-connects via WebSocket
 >
 > ✅ **One-time import.** The plugin stays in your Development plugins list. Just run it each session.
@@ -87,7 +87,7 @@ If you see `"valid": false`, the AI will provide step-by-step setup instructions
 
 #### Plugin Not Appearing in Development Plugins
 **Cause:** Plugin manifest not imported.
-**Fix:** Go to Figma → Plugins → Development → Import plugin from manifest... → select `figma-desktop-bridge/manifest.json`.
+**Fix:** Go to Figma → Plugins → Development → Import plugin from manifest... → select `figma-claude-connect/manifest.json`.
 
 #### Port 9223 Already in Use
 **Cause:** Another MCP server instance is running on port 9223 (common with Claude Desktop's dual-tab architecture).
@@ -97,7 +97,7 @@ If you see `"valid": false`, the AI will provide step-by-step setup instructions
 **Cause:** The Desktop Bridge plugin was imported before v1.10.0 and only scans port 9223. The server fell back to a different port.
 **Fix:** Re-import the Desktop Bridge plugin manifest in Figma:
 1. Go to **Plugins → Development → Import plugin from manifest...**
-2. Select `figma-desktop-bridge/manifest.json` from the figma-console-mcp package directory
+2. Select `figma-claude-connect/manifest.json` from the figma-console-mcp package directory
 3. Run the plugin — it will now scan ports 9223–9232 and connect to all active servers
 
 > **NPX users:** The manifest is inside the npm cache. Run `figma_get_status` — the AI will show you the exact path via the `pluginPath` field in the status output.

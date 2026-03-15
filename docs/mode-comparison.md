@@ -172,7 +172,7 @@ Claude Desktop/Code/Cursor/Windsurf
     ↓ (stdio transport)
 Local MCP Server (Node.js)
     ↓ (WebSocket, ports 9223–9232)
-Figma Desktop Bridge Plugin
+Figma Claude Connect Plugin
     ↓ (Plugin API)
 Variables & Components Data
 ```
@@ -354,7 +354,7 @@ Variables & Components Data
 
 ---
 
-## Figma Desktop Bridge Plugin
+## Figma Claude Connect Plugin
 
 ### Required for Both Local Mode and Cloud Mode
 
@@ -366,7 +366,7 @@ The Desktop Bridge Plugin is the bridge between Figma and the MCP server. It com
 **Plugin Setup:**
 1. Open Figma Desktop (normal launch — no debug flags needed)
 2. Go to **Plugins → Development → Import plugin from manifest...**
-3. Select `figma-desktop-bridge/manifest.json` from the figma-console-mcp directory
+3. Select `figma-claude-connect/manifest.json` from the figma-console-mcp directory
 4. Run the plugin in your Figma file — it auto-connects via WebSocket
 
 > **One-time import.** Once imported, the plugin stays in your Development plugins list.
