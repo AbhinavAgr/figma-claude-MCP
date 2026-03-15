@@ -99,11 +99,11 @@ If not:
 Open your terminal and run:
 
 ```bash
-git clone https://github.com/southleft/figma-console-mcp.git
+git clone https://github.com/AbhinavAgr/figma-claude-MCP.git
 ```
 ### then
 ```bash
-cd figma-console-mcp
+cd figma-claude-mcp
 ```
 ---
 
