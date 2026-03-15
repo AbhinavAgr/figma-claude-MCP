@@ -19,13 +19,6 @@ Figma Console MCP is a Model Context Protocol server that gives Claude direct ac
 
 ## What Claude Can Do With Your Figma File
 
-### Read & Inspect
-```
-Get all design variables from my Figma file
-Show me all components in the current document
-What color styles are defined in this file?
-Get the full file structure
-```
 
 ### Create & Design
 ```
@@ -41,13 +34,6 @@ Create a "Brand Colors" token collection with Light and Dark modes
 Add a primary color variable — #3B82F6 for Light, #60A5FA for Dark
 Rename the "Default" mode to "Light Theme"
 Add a "High Contrast" mode to my existing token collection
-```
-
-### Debug Plugins
-```
-Show me any console errors from my plugin
-Watch the console for 30 seconds while I test my plugin
-Take a screenshot of the current canvas
 ```
 
 ### Analyze & Audit
