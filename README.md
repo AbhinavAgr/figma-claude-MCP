@@ -11,7 +11,11 @@
 
 ## What is this?
 
-Figma Console MCP is a Model Context Protocol server that gives Claude direct access to your Figma files. Once connected, you can ask Claude to read your design data, create UI components, manage design tokens, debug plugins, and audit your design system — all without leaving the conversation.
+This connects Claude to your Figma file so you can design with prompts. Just describe what you want — Claude will create it directly in Figma.
+
+- Create UI components and full screens by typing what you need
+- Integrate and manage your design system (tokens, variables, styles)
+- Inspect, audit, and debug your Figma files through conversation
 
 ---
 
@@ -131,7 +135,7 @@ This generates `dist/local.js` — the file Claude Desktop will run.
    - In Figma Desktop: click your profile icon → **Settings** → **Security** → **Personal access tokens**
    - Or visit [Figma Help: Personal access tokens](https://help.figma.com/hc/en-us/articles/8085703771159) and follow the steps
 2. Click **Add new token**
-3. Enter description: `Figma Console MCP`
+3. Enter name: `Figma Claude MCP`
 4. Copy the token — you won't see it again! (starts with `figd_`)
 
 ---
@@ -168,7 +172,7 @@ Create (or edit) `claude_desktop_config.json` inside that folder:
 }
 ```
 
-Replace `YOUR_USERNAME` with your actual username and `YOUR_FIGMA_TOKEN` with the token from Step 4.
+Replace `YOUR_USERNAME` with your actual system username and `YOUR_FIGMA_TOKEN` with the token from Step 4.
 
 > **Tip:** The path in `args` must be the full absolute path to `dist/local.js`. Run `pwd` inside the `figma-console-mcp` folder to get it.
 
@@ -252,6 +256,27 @@ Closing the plugin window stops the connection.
 
 **Plugin does not appear in Figma**
 → Go to `Plugins → Development → Refresh plugins`.
+
+---
+
+## Example Prompts
+
+Once connected, try these in Claude Desktop to create screens directly in Figma:
+
+**Login Screen**
+```
+Create a mobile login screen with an app logo at the top, email and password fields, a Sign In button, and a "Forgot password?" link below
+```
+
+**Dashboard**
+```
+Design a web dashboard with a sidebar navigation, a header with a search bar and user avatar, and a main area showing 4 stat cards and a recent activity table
+```
+
+**Onboarding Flow**
+```
+Build a 3-step onboarding screen with a progress indicator at the top, an illustration area, a title, a short description, and Next/Back buttons at the bottom
+```
 
 ---
 
