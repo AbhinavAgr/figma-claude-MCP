@@ -24,7 +24,7 @@ export class WebSocketConnector implements IFigmaConnector {
   async initialize(): Promise<void> {
     if (!this.wsServer.isClientConnected()) {
       throw new Error(
-        'No WebSocket client connected. Make sure the Desktop Bridge plugin is open in Figma.'
+        'No WebSocket client connected. Make sure the Figma Claude Connect plugin is open in Figma.'
       );
     }
     logger.info('WebSocket connector initialized');

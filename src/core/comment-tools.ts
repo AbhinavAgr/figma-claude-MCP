@@ -56,7 +56,7 @@ export function registerCommentTools(
 								text: JSON.stringify({
 									error: "no_file_url",
 									message:
-										"No Figma file URL available. Pass the fileUrl parameter or ensure the Desktop Bridge plugin is open in Figma.",
+										"No Figma file URL available. Pass the fileUrl parameter or ensure the Figma Claude Connect plugin is open in Figma.",
 								}),
 							},
 						],
@@ -172,7 +172,7 @@ export function registerCommentTools(
 								text: JSON.stringify({
 									error: "no_file_url",
 									message:
-										"No Figma file URL available. Pass the fileUrl parameter or ensure the Desktop Bridge plugin is open in Figma.",
+										"No Figma file URL available. Pass the fileUrl parameter or ensure the Figma Claude Connect plugin is open in Figma.",
 								}),
 							},
 						],
@@ -282,7 +282,7 @@ export function registerCommentTools(
 								text: JSON.stringify({
 									error: "no_file_url",
 									message:
-										"No Figma file URL available. Pass the fileUrl parameter or ensure the Desktop Bridge plugin is open in Figma.",
+										"No Figma file URL available. Pass the fileUrl parameter or ensure the Figma Claude Connect plugin is open in Figma.",
 								}),
 							},
 						],

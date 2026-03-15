@@ -2104,7 +2104,7 @@ function generateAnatomySection(node: any): string {
 		lines.push(tree);
 		lines.push("```");
 		lines.push("");
-		lines.push("_Note: Tree depth may be limited by the Figma REST API. Use the Desktop Bridge plugin for full node-level anatomy._");
+		lines.push("_Note: Tree depth may be limited by the Figma REST API. Use the Figma Claude Connect plugin for full node-level anatomy._");
 	}
 	lines.push("");
 
@@ -2436,7 +2436,7 @@ export function registerDesignCodeTools(
 				const url = fileUrl || getCurrentUrl();
 				if (!url) {
 					throw new Error(
-						"No Figma file URL available. Pass the fileUrl parameter or ensure the Desktop Bridge plugin is open in Figma.",
+						"No Figma file URL available. Pass the fileUrl parameter or ensure the Figma Claude Connect plugin is open in Figma.",
 					);
 				}
 
@@ -2666,7 +2666,7 @@ export function registerDesignCodeTools(
 				const url = fileUrl || getCurrentUrl();
 				if (!url) {
 					throw new Error(
-						"No Figma file URL available. Pass the fileUrl parameter or ensure the Desktop Bridge plugin is open in Figma.",
+						"No Figma file URL available. Pass the fileUrl parameter or ensure the Figma Claude Connect plugin is open in Figma.",
 					);
 				}
 
@@ -2766,7 +2766,7 @@ export function registerDesignCodeTools(
 
 				// Prefer markdown description (has headers/bold markers for parsing) over plain text
 				// REST API getNodes() often returns empty description for COMPONENT_SET nodes,
-				// so fall back to Desktop Bridge plugin API which has the reliable description.
+				// so fall back to Figma Claude Connect plugin API which has the reliable description.
 				let description = node.descriptionMarkdown || node.description || componentMeta?.description || "";
 				if (!description && getDesktopConnector) {
 					try {

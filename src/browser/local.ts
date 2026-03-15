@@ -1,7 +1,7 @@
 /**
  * Local Browser Manager (Legacy)
  * Note: This module is maintained for backwards compatibility but is no longer
- * the primary connection method. Use the WebSocket Desktop Bridge plugin instead.
+ * the primary connection method. Use the WebSocket Figma Claude Connect plugin instead.
  */
 
 import puppeteer, { type Browser, type Page } from 'puppeteer-core';
@@ -46,8 +46,8 @@ export class LocalBrowserManager implements IBrowserManager {
 
 		logger.warn(
 			{ browserURL },
-			'[SECURITY] Falling back to legacy CDP connector — WebSocket Desktop Bridge plugin is not active. ' +
-			'Keep the Desktop Bridge plugin open in Figma to avoid this fallback.',
+			'[SECURITY] Falling back to legacy CDP connector — WebSocket Figma Claude Connect plugin is not active. ' +
+			'Keep the Figma Claude Connect plugin open in Figma to avoid this fallback.',
 		);
 		logger.info({ browserURL }, 'Connecting to Figma Desktop');
 

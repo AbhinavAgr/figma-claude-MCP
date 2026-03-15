@@ -18,7 +18,7 @@ export function registerWriteTools(
 
 	server.tool(
 		"figma_execute",
-		`Execute arbitrary JavaScript in Figma's plugin context with full access to the figma API. Use for complex operations not covered by other tools. Requires Desktop Bridge plugin. CAUTION: Can modify your document.
+		`Execute arbitrary JavaScript in Figma's plugin context with full access to the figma API. Use for complex operations not covered by other tools. Requires Figma Claude Connect plugin. CAUTION: Can modify your document.
 
 **COMPONENT INSTANCES:** For instances (node.type === 'INSTANCE'), use figma_set_instance_properties — direct text editing FAILS SILENTLY. Check instance.componentProperties for available props (may have #nodeId suffixes).
 
@@ -81,7 +81,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to execute code in Figma plugin context",
-									hint: "Make sure the Desktop Bridge plugin is running in Figma",
+									hint: "Make sure the Figma Claude Connect plugin is running in Figma",
 								},
 							),
 						},
@@ -99,7 +99,7 @@ export function registerWriteTools(
 	// Tool: Update a variable's value
 	server.tool(
 		"figma_update_variable",
-		"Update a single variable's value. For multiple updates, use figma_batch_update_variables instead (10-50x faster). Use figma_get_variables first for IDs. COLOR: hex '#FF0000', FLOAT: number, STRING: text, BOOLEAN: true/false. Requires Desktop Bridge plugin.",
+		"Update a single variable's value. For multiple updates, use figma_batch_update_variables instead (10-50x faster). Use figma_get_variables first for IDs. COLOR: hex '#FF0000', FLOAT: number, STRING: text, BOOLEAN: true/false. Requires Figma Claude Connect plugin.",
 		{
 			variableId: z
 				.string()
@@ -152,7 +152,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to update variable",
-									hint: "Make sure the Desktop Bridge plugin is running and the variable ID is correct",
+									hint: "Make sure the Figma Claude Connect plugin is running and the variable ID is correct",
 								},
 							),
 						},
@@ -166,7 +166,7 @@ export function registerWriteTools(
 	// Tool: Create a new variable
 	server.tool(
 		"figma_create_variable",
-		"Create a single Figma variable. For multiple variables, use figma_batch_create_variables instead (10-50x faster). Use figma_get_variables first to get collection IDs. Supports COLOR, FLOAT, STRING, BOOLEAN. Requires Desktop Bridge plugin.",
+		"Create a single Figma variable. For multiple variables, use figma_batch_create_variables instead (10-50x faster). Use figma_get_variables first to get collection IDs. Supports COLOR, FLOAT, STRING, BOOLEAN. Requires Figma Claude Connect plugin.",
 		{
 			name: z
 				.string()
@@ -235,7 +235,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to create variable",
-									hint: "Make sure the Desktop Bridge plugin is running and the collection ID is correct",
+									hint: "Make sure the Figma Claude Connect plugin is running and the collection ID is correct",
 								},
 							),
 						},
@@ -249,7 +249,7 @@ export function registerWriteTools(
 	// Tool: Create a new variable collection
 	server.tool(
 		"figma_create_variable_collection",
-		"Create an empty variable collection. To create a collection WITH variables and modes in one step, use figma_setup_design_tokens instead. Requires Desktop Bridge plugin.",
+		"Create an empty variable collection. To create a collection WITH variables and modes in one step, use figma_setup_design_tokens instead. Requires Figma Claude Connect plugin.",
 		{
 			name: z
 				.string()
@@ -301,7 +301,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to create variable collection",
-									hint: "Make sure the Desktop Bridge plugin is running in Figma",
+									hint: "Make sure the Figma Claude Connect plugin is running in Figma",
 								},
 							),
 						},
@@ -315,7 +315,7 @@ export function registerWriteTools(
 	// Tool: Delete a variable
 	server.tool(
 		"figma_delete_variable",
-		"Delete a Figma variable. WARNING: This is a destructive operation that cannot be undone (except with Figma's undo). Use figma_get_variables first to get variable IDs. Requires the Desktop Bridge plugin to be running.",
+		"Delete a Figma variable. WARNING: This is a destructive operation that cannot be undone (except with Figma's undo). Use figma_get_variables first to get variable IDs. Requires the Figma Claude Connect plugin to be running.",
 		{
 			variableId: z
 				.string()
@@ -356,7 +356,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to delete variable",
-									hint: "Make sure the Desktop Bridge plugin is running and the variable ID is correct",
+									hint: "Make sure the Figma Claude Connect plugin is running and the variable ID is correct",
 								},
 							),
 						},
@@ -370,7 +370,7 @@ export function registerWriteTools(
 	// Tool: Delete a variable collection
 	server.tool(
 		"figma_delete_variable_collection",
-		"Delete a Figma variable collection and ALL its variables. WARNING: This is a destructive operation that deletes all variables in the collection and cannot be undone (except with Figma's undo). Requires the Desktop Bridge plugin to be running.",
+		"Delete a Figma variable collection and ALL its variables. WARNING: This is a destructive operation that deletes all variables in the collection and cannot be undone (except with Figma's undo). Requires the Figma Claude Connect plugin to be running.",
 		{
 			collectionId: z
 				.string()
@@ -411,7 +411,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to delete variable collection",
-									hint: "Make sure the Desktop Bridge plugin is running and the collection ID is correct",
+									hint: "Make sure the Figma Claude Connect plugin is running and the collection ID is correct",
 								},
 							),
 						},
@@ -425,7 +425,7 @@ export function registerWriteTools(
 	// Tool: Rename a variable
 	server.tool(
 		"figma_rename_variable",
-		"Rename an existing Figma variable. This updates the variable's name while preserving all its values and settings. Requires the Desktop Bridge plugin to be running.",
+		"Rename an existing Figma variable. This updates the variable's name while preserving all its values and settings. Requires the Figma Claude Connect plugin to be running.",
 		{
 			variableId: z
 				.string()
@@ -470,7 +470,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to rename variable",
-									hint: "Make sure the Desktop Bridge plugin is running and the variable ID is correct",
+									hint: "Make sure the Figma Claude Connect plugin is running and the variable ID is correct",
 								},
 							),
 						},
@@ -484,7 +484,7 @@ export function registerWriteTools(
 	// Tool: Add a mode to a collection
 	server.tool(
 		"figma_add_mode",
-		"Add a new mode to an existing Figma variable collection. Modes allow variables to have different values for different contexts (e.g., Light/Dark themes, device sizes). Requires the Desktop Bridge plugin to be running.",
+		"Add a new mode to an existing Figma variable collection. Modes allow variables to have different values for different contexts (e.g., Light/Dark themes, device sizes). Requires the Figma Claude Connect plugin to be running.",
 		{
 			collectionId: z
 				.string()
@@ -529,7 +529,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to add mode to collection",
-									hint: "Make sure the Desktop Bridge plugin is running, the collection ID is correct, and you haven't exceeded Figma's mode limit",
+									hint: "Make sure the Figma Claude Connect plugin is running, the collection ID is correct, and you haven't exceeded Figma's mode limit",
 								},
 							),
 						},
@@ -543,7 +543,7 @@ export function registerWriteTools(
 	// Tool: Rename a mode in a collection
 	server.tool(
 		"figma_rename_mode",
-		"Rename an existing mode in a Figma variable collection. Requires the Desktop Bridge plugin to be running.",
+		"Rename an existing mode in a Figma variable collection. Requires the Figma Claude Connect plugin to be running.",
 		{
 			collectionId: z
 				.string()
@@ -597,7 +597,7 @@ export function registerWriteTools(
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to rename mode",
-									hint: "Make sure the Desktop Bridge plugin is running, the collection ID and mode ID are correct",
+									hint: "Make sure the Figma Claude Connect plugin is running, the collection ID and mode ID are correct",
 								},
 							),
 						},
@@ -618,7 +618,7 @@ export function registerWriteTools(
 	// Tool: Batch create variables
 	server.tool(
 		"figma_batch_create_variables",
-		"Create multiple variables in one operation. Use instead of calling figma_create_variable repeatedly — up to 50x faster for bulk operations. Get collection IDs from figma_get_variables first. Requires Desktop Bridge plugin.",
+		"Create multiple variables in one operation. Use instead of calling figma_create_variable repeatedly — up to 50x faster for bulk operations. Get collection IDs from figma_get_variables first. Requires Figma Claude Connect plugin.",
 		{
 			collectionId: z
 				.string()
@@ -712,7 +712,7 @@ return {
 										error: result.error,
 										message:
 											"Batch create failed during execution",
-										hint: "Check that the collection ID is valid and the Desktop Bridge plugin is running",
+										hint: "Check that the collection ID is valid and the Figma Claude Connect plugin is running",
 									},
 								),
 							},
@@ -749,7 +749,7 @@ return {
 											? error.message
 											: String(error),
 									message: "Failed to batch create variables",
-									hint: "Make sure the Desktop Bridge plugin is running and the collection ID is correct",
+									hint: "Make sure the Figma Claude Connect plugin is running and the collection ID is correct",
 								},
 							),
 						},
@@ -763,7 +763,7 @@ return {
 	// Tool: Batch update variables
 	server.tool(
 		"figma_batch_update_variables",
-		"Update multiple variable values in one operation. Use instead of calling figma_update_variable repeatedly — up to 50x faster for bulk updates. Get variable/mode IDs from figma_get_variables first. Requires Desktop Bridge plugin.",
+		"Update multiple variable values in one operation. Use instead of calling figma_update_variable repeatedly — up to 50x faster for bulk updates. Get variable/mode IDs from figma_get_variables first. Requires Figma Claude Connect plugin.",
 		{
 			updates: z
 				.array(
@@ -878,7 +878,7 @@ return {
 											? error.message
 											: String(error),
 									message: "Failed to batch update variables",
-									hint: "Make sure the Desktop Bridge plugin is running and variable/mode IDs are correct",
+									hint: "Make sure the Figma Claude Connect plugin is running and variable/mode IDs are correct",
 								},
 							),
 						},
@@ -892,7 +892,7 @@ return {
 	// Tool: Setup design tokens (collection + modes + variables atomically)
 	server.tool(
 		"figma_setup_design_tokens",
-		"Create a complete design token structure in one operation: collection, modes, and all variables. Ideal for importing CSS custom properties or design tokens into Figma. Requires Desktop Bridge plugin.",
+		"Create a complete design token structure in one operation: collection, modes, and all variables. Ideal for importing CSS custom properties or design tokens into Figma. Requires Figma Claude Connect plugin.",
 		{
 			collectionName: z
 				.string()
@@ -1011,7 +1011,7 @@ return {
 										error: result.error,
 										message:
 											"Design token setup failed during execution",
-										hint: "Check the token definitions and ensure the Desktop Bridge plugin is running",
+										hint: "Check the token definitions and ensure the Figma Claude Connect plugin is running",
 									},
 								),
 							},
@@ -1048,7 +1048,7 @@ return {
 											? error.message
 											: String(error),
 									message: "Failed to setup design tokens",
-									hint: "Make sure the Desktop Bridge plugin is running in Figma",
+									hint: "Make sure the Figma Claude Connect plugin is running in Figma",
 								},
 							),
 						},
@@ -1167,7 +1167,7 @@ After instantiating components, use figma_take_screenshot to verify the result l
 									error:
 										error instanceof Error ? error.message : String(error),
 									message: "Failed to instantiate component",
-									hint: "Make sure the component key is correct and the Desktop Bridge plugin is running",
+									hint: "Make sure the component key is correct and the Figma Claude Connect plugin is running",
 								},
 							),
 						},
@@ -1648,7 +1648,7 @@ After instantiating components, use figma_take_screenshot to verify the result l
 		"figma_set_image_fill",
 		"Set an image fill on one or more Figma nodes. The imageData parameter accepts a base64-encoded " +
 		"image string (JPEG/PNG). The image is decoded in the browser bridge and passed " +
-		"as raw bytes to the Figma plugin. Requires Desktop Bridge plugin.",
+		"as raw bytes to the Figma plugin. Requires Figma Claude Connect plugin.",
 		{
 			nodeIds: z.array(z.string()).describe("Array of node IDs to apply the image fill to"),
 			imageData: z.string().describe("Base64-encoded image data (JPEG/PNG)"),
@@ -2569,7 +2569,7 @@ return {
 								{
 									error:
 										error instanceof Error ? error.message : String(error),
-									hint: "Make sure the Desktop Bridge plugin is running and a component set exists.",
+									hint: "Make sure the Figma Claude Connect plugin is running and a component set exists.",
 								},
 							),
 						},
@@ -2587,7 +2587,7 @@ return {
 		"Checks color contrast ratios, text sizing, touch targets, hardcoded values, detached components, " +
 		"naming conventions, and layout quality. Returns categorized findings with severity levels. " +
 		"Use natural language like 'check my design for accessibility issues' or 'lint this page'. " +
-		"Requires Desktop Bridge plugin.",
+		"Requires Figma Claude Connect plugin.",
 		{
 			nodeId: z.string().optional().describe("Node ID to lint (defaults to current page)"),
 			rules: z.array(z.string()).optional().describe("Rule filter: ['all'] (default), ['wcag'], ['design-system'], ['layout'], or specific rule IDs like ['wcag-contrast', 'detached-component']"),
@@ -2624,7 +2624,7 @@ return {
 							type: "text" as const,
 							text: JSON.stringify({
 								error: error instanceof Error ? error.message : String(error),
-								hint: "Make sure the Desktop Bridge plugin is running in your Figma file.",
+								hint: "Make sure the Figma Claude Connect plugin is running in your Figma file.",
 							}),
 						},
 					],

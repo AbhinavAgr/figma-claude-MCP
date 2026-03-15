@@ -37,8 +37,8 @@ const DEFAULT_CONFIG: ServerConfig = {
       '--disable-blink-features=AutomationControlled',
       '--disable-dev-shm-usage',
       // SECURITY WARNING: --no-sandbox disables Chrome's OS-level renderer isolation.
-      // This is only reached when the WebSocket Desktop Bridge plugin is unavailable
-      // and the legacy CDP fallback is used. Keep the Desktop Bridge plugin active to
+      // This is only reached when the WebSocket Figma Claude Connect plugin is unavailable
+      // and the legacy CDP fallback is used. Keep the Figma Claude Connect plugin active to
       // avoid this code path entirely. Never run this in shared/untrusted environments.
       '--no-sandbox',
     ],

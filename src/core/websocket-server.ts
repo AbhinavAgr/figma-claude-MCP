@@ -1,7 +1,7 @@
 /**
  * WebSocket Bridge Server (Multi-Client)
  *
- * Creates a WebSocket server that multiple Desktop Bridge plugin instances connect to.
+ * Creates a WebSocket server that multiple Figma Claude Connect plugin instances connect to.
  * Each instance represents a different Figma file and is identified by its fileKey
  * (sent via FILE_INFO on connection). Per-file state (selection, document changes,
  * console logs) is maintained independently.
@@ -77,7 +77,7 @@ export interface DocumentChangeEntry {
 
 /**
  * Per-file client connection state.
- * Each Figma file with the Desktop Bridge plugin open gets its own ClientConnection.
+ * Each Figma file with the Figma Claude Connect plugin open gets its own ClientConnection.
  */
 export interface ClientConnection {
   ws: WebSocket;
@@ -480,13 +480,13 @@ export class FigmaWebSocketServer extends EventEmitter {
       const fileKey = targetFileKey || this._activeFileKey;
 
       if (!fileKey) {
-        reject(new Error('No active file connected. Make sure the Desktop Bridge plugin is open in Figma.'));
+        reject(new Error('No active file connected. Make sure the Figma Claude Connect plugin is open in Figma.'));
         return;
       }
 
       const client = this.clients.get(fileKey);
       if (!client || client.ws.readyState !== WebSocket.OPEN) {
-        reject(new Error('No WebSocket client connected. Make sure the Desktop Bridge plugin is open in Figma.'));
+        reject(new Error('No WebSocket client connected. Make sure the Figma Claude Connect plugin is open in Figma.'));
         return;
       }
 

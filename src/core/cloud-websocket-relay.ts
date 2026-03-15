@@ -199,7 +199,7 @@ export class PluginRelayDO extends DurableObject {
 		const pluginWs = this.getPluginWs();
 		if (!pluginWs) {
 			return new Response(
-				JSON.stringify({ error: 'No plugin connected. User must pair the Desktop Bridge plugin first.' }),
+				JSON.stringify({ error: 'No plugin connected. User must pair the Figma Claude Connect plugin first.' }),
 				{ status: 502, headers: { 'Content-Type': 'application/json' } },
 			);
 		}

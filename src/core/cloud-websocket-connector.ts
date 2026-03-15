@@ -27,7 +27,7 @@ export class CloudWebSocketConnector implements IFigmaConnector {
 		const status = await res.json() as { connected: boolean };
 		if (!status.connected) {
 			throw new Error(
-				'No plugin connected to cloud relay. User must pair the Desktop Bridge plugin first (use figma_pair_plugin tool).'
+				'No plugin connected to cloud relay. User must pair the Figma Claude Connect plugin first (use figma_pair_plugin tool).'
 			);
 		}
 	}

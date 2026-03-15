@@ -916,7 +916,7 @@ export class FigmaConsoleMCPv3 extends McpAgent {
 								pairingCode: code,
 								expiresIn: "5 minutes",
 								instructions: [
-									"1. Open the Desktop Bridge plugin in Figma Desktop",
+									"1. Open the Figma Claude Connect plugin in Figma Desktop",
 									"2. Click the 'Cloud Mode' toggle in the plugin UI",
 									`3. Enter pairing code: ${code}`,
 									"4. Click 'Connect' — the plugin will connect to the cloud relay",
@@ -942,7 +942,7 @@ export class FigmaConsoleMCPv3 extends McpAgent {
 			const env = this.env as Env;
 			const relayDoId = await this.ctx.storage.get<string>('relayDoId');
 			if (!relayDoId) {
-				throw new Error('No cloud relay session. Call figma_pair_plugin first to pair the Desktop Bridge plugin.');
+				throw new Error('No cloud relay session. Call figma_pair_plugin first to pair the Figma Claude Connect plugin.');
 			}
 			const doId = env.PLUGIN_RELAY.idFromString(relayDoId);
 			const stub = env.PLUGIN_RELAY.get(doId);
@@ -1272,7 +1272,7 @@ export default {
 			const getCloudDesktopConnector = async (): Promise<any> => {
 				const relayDoId = await env.OAUTH_TOKENS.get(`relay:${bearerToken}`);
 				if (!relayDoId) {
-					throw new Error('No cloud relay session. Call figma_pair_plugin first to pair the Desktop Bridge plugin.');
+					throw new Error('No cloud relay session. Call figma_pair_plugin first to pair the Figma Claude Connect plugin.');
 				}
 				const doId = env.PLUGIN_RELAY.idFromString(relayDoId);
 				const stub = env.PLUGIN_RELAY.get(doId);

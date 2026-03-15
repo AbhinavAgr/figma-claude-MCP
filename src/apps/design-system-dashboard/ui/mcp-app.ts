@@ -228,7 +228,7 @@ function render(): void {
 
 	const dataNoticeHtml =
 		dataAvailability && !dataAvailability.variables
-			? `<div class="data-notice">Variable and token data unavailable. ${esc(dataAvailability.variableError || "Requires Figma Enterprise plan or Desktop Bridge plugin.")} Token-related scores may not reflect actual design system quality.</div>`
+			? `<div class="data-notice">Variable and token data unavailable. ${esc(dataAvailability.variableError || "Requires Figma Enterprise plan or Figma Claude Connect plugin.")} Token-related scores may not reflect actual design system quality.</div>`
 			: "";
 
 	appContainer.innerHTML = `

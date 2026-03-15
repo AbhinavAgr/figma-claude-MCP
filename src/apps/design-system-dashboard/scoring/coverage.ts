@@ -35,7 +35,7 @@ function variableDataUnavailable(data: DesignSystemRawData): boolean {
 function variableUnavailableMessage(data: DesignSystemRawData): string {
 	const reason =
 		data.dataAvailability?.variableError ||
-		"Figma Enterprise plan or Desktop Bridge plugin required";
+		"Figma Enterprise plan or Figma Claude Connect plugin required";
 	return `Variable data unavailable: ${reason}`;
 }
 

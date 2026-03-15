@@ -7,7 +7,7 @@
  *
  * Uses Puppeteer's Worker API to directly access plugin workers.
  * Note: This is a legacy connector maintained for backwards compatibility.
- * The WebSocket Desktop Bridge plugin is the primary connection method.
+ * The WebSocket Figma Claude Connect plugin is the primary connection method.
  */
 
 import { Page } from 'puppeteer-core';
@@ -238,7 +238,7 @@ export class FigmaDesktopConnector implements IFigmaConnector {
   /**
    * Get component data by node ID from plugin UI window object
    * This bypasses the REST API bug where descriptions are missing
-   * by accessing data from the Desktop Bridge plugin via its UI iframe
+   * by accessing data from the Figma Claude Connect plugin via its UI iframe
    */
   async getComponentFromPluginUI(nodeId: string): Promise<any> {
     try {
@@ -331,7 +331,7 @@ export class FigmaDesktopConnector implements IFigmaConnector {
       }
 
       // If no frame found with function, throw error
-      throw new Error('No plugin UI found with requestComponentData function. Make sure the Desktop Bridge plugin is running.');
+      throw new Error('No plugin UI found with requestComponentData function. Make sure the Figma Claude Connect plugin is running.');
     } catch (error) {
       logger.error({ error, nodeId }, 'Failed to get component from plugin UI');
 
@@ -550,7 +550,7 @@ export class FigmaDesktopConnector implements IFigmaConnector {
   // ============================================================================
 
   /**
-   * Find the Desktop Bridge plugin UI iframe
+   * Find the Figma Claude Connect plugin UI iframe
    * Returns the frame that has the write operation functions
    * Handles detached frame errors gracefully
    */
@@ -570,7 +570,7 @@ export class FigmaDesktopConnector implements IFigmaConnector {
 
     const frames = this.page.frames();
 
-    logger.debug({ frameCount: frames.length }, 'Searching for Desktop Bridge plugin UI frame');
+    logger.debug({ frameCount: frames.length }, 'Searching for Figma Claude Connect plugin UI frame');
 
     for (const frame of frames) {
       try {
@@ -579,11 +579,11 @@ export class FigmaDesktopConnector implements IFigmaConnector {
           continue;
         }
 
-        // Check if this frame has the executeCode function (our Desktop Bridge plugin)
+        // Check if this frame has the executeCode function (our Figma Claude Connect plugin)
         const hasWriteOps = await frame.evaluate('typeof window.executeCode === "function"');
 
         if (hasWriteOps) {
-          logger.info({ frameUrl: frame.url() }, 'Found Desktop Bridge plugin UI frame');
+          logger.info({ frameUrl: frame.url() }, 'Found Figma Claude Connect plugin UI frame');
           this.cachedPluginFrame = frame;
           return frame;
         }
@@ -598,7 +598,7 @@ export class FigmaDesktopConnector implements IFigmaConnector {
     }
 
     throw new Error(
-      'Desktop Bridge plugin UI not found. Make sure the Desktop Bridge plugin is running in Figma. ' +
+      'Figma Claude Connect plugin UI not found. Make sure the Figma Claude Connect plugin is running in Figma. ' +
       'The plugin must be open for write operations to work.'
     );
   }
