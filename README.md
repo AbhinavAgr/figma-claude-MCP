@@ -7,8 +7,6 @@
 
 > Connect **Claude Desktop** to **Figma Desktop** and design, inspect, and manage your files through natural language.
 
-> **Note:** This is a beginner-friendly adaptation of the [original Figma Console MCP repository](https://github.com/southleft/figma-console-mcp/tree/main?tab=readme-ov-file). I've simplified the setup guide and focused it on Claude Desktop so it's easier to get started. If you want the full documentation — including NPX setup, Cloud Mode, Remote SSE, and advanced options — visit the original repo.
-
 ---
 
 ## What is this?
@@ -77,7 +75,7 @@ Figma API
 
 ### Step 0 — Install Node.js (If Needed)
 
-Check if Node.js is installed:
+Open your terminal and check if Node.js is installed:
 
 ```bash
 node -v
@@ -94,6 +92,8 @@ If not:
 
 ### Step 1 — Clone the Repository
 
+Open your terminal and run:
+
 ```bash
 git clone https://github.com/southleft/figma-console-mcp.git
 ```
@@ -105,6 +105,8 @@ cd figma-console-mcp
 
 ### Step 2 — Install Dependencies
 
+In the same terminal, run:
+
 ```bash
 npm install
 ```
@@ -112,6 +114,8 @@ npm install
 ---
 
 ### Step 3 — Build the Local MCP Server
+
+Then run:
 
 ```bash
 npm run build:local
@@ -121,25 +125,32 @@ This generates `dist/local.js` — the file Claude Desktop will run.
 
 ---
 
-### Step 4 — Generate a Figma API Token
+### Step 4 — Get Your Figma API Token
 
-1. Go to **Figma → Settings → Personal access tokens**
-   - Direct link: [figma.com/developers/api#access-tokens](https://www.figma.com/developers/api#access-tokens)
-2. Click **Generate new token**
-3. Name it `Claude MCP`
-4. Copy the token — it starts with `figd_` and you won't see it again
+1. Go to **Manage personal access tokens** in Figma:
+   - In Figma Desktop: click your profile icon → **Settings** → **Security** → **Personal access tokens**
+   - Or visit [Figma Help: Personal access tokens](https://help.figma.com/hc/en-us/articles/8085703771159) and follow the steps
+2. Click **Add new token**
+3. Enter description: `Figma Console MCP`
+4. Copy the token — you won't see it again! (starts with `figd_`)
 
 ---
 
 ### Step 5 — Configure Claude Desktop
 
-Open the Claude Desktop config folder:
+Open the Claude Desktop config folder in your terminal:
 
-**macOS:** `~/Library/Application Support/Claude/`
+**macOS:**
+```bash
+open ~/Library/Application\ Support/Claude/
+```
 
-**Windows:** `%APPDATA%\Claude\`
+**Windows** — press `Win + R` and enter:
+```
+%APPDATA%\Claude\
+```
 
-Create (or edit) `claude_desktop_config.json`:
+Create (or edit) `claude_desktop_config.json` inside that folder:
 
 ```json
 {
@@ -203,13 +214,7 @@ This confirms the plugin connected to the MCP server via WebSocket.
 
 ### Step 9 — Test the Connection
 
-In **Claude Desktop**, ask:
-
-```
-What Figma tools are available?
-```
-
-Claude should respond with available MCP tools. Then try:
+In **Claude Desktop**, start with:
 
 ```
 Check Figma status
@@ -237,14 +242,6 @@ Closing the plugin window stops the connection.
 
 ---
 
-## Cloud Mode (Optional)
-
-If you prefer to use a web-based AI client (Claude.ai, v0, Replit, or Lovable) instead of Claude Desktop, Cloud Mode lets you connect without Node.js. In the plugin, toggle **Cloud Mode**, then tell your AI client "Connect to my Figma plugin" to receive a 6-character pairing code. Enter it in the plugin to establish the connection.
-
-Cloud Mode gives you 43 tools including full design creation and token management. Real-time console monitoring is only available in Local Mode.
-
----
-
 ## Troubleshooting
 
 **Plugin shows "connecting" and never reaches MCP ready**
@@ -264,9 +261,4 @@ MIT — see [LICENSE](LICENSE) for details.
 
 ---
 
-## Links
-
-- [Report Issues](https://github.com/southleft/figma-console-mcp/issues)
-- [Discussions](https://github.com/southleft/figma-console-mcp/discussions)
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [Figma API](https://www.figma.com/developers/api)
+> **Note:** This is a beginner-friendly adaptation of the [original Figma Console MCP repository](https://github.com/southleft/figma-console-mcp/tree/main?tab=readme-ov-file). I've simplified the setup guide and focused it on Claude Desktop so it's easier to get started. If you want the full documentation — including NPX setup, Cloud Mode, Remote SSE, and advanced options — visit the original repo.
