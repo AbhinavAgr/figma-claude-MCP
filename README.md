@@ -96,9 +96,11 @@ If not:
 
 ```bash
 git clone https://github.com/southleft/figma-console-mcp.git
+```
+### then
+```bash
 cd figma-console-mcp
 ```
-
 ---
 
 ### Step 2 — Install Dependencies
