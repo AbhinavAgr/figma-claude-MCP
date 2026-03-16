@@ -162,7 +162,7 @@ Create (or edit) `claude_desktop_config.json` inside that folder:
     "figma-console": {
       "command": "node",
       "args": [
-        "/Users/YOUR_USERNAME/figma-console-mcp/dist/local.js"
+        "/Users/YOUR_USERNAME/figma-claude-mcp/dist/local.js"
       ],
       "env": {
         "FIGMA_ACCESS_TOKEN": "YOUR_FIGMA_TOKEN"
@@ -190,7 +190,7 @@ Final code should look something like this (make sure {} are properly placed)
     "figma-console": {
       "command": "node",
       "args": [
-        "/Users/abhinav/Documents/Claude to Figma/figma-console-mcp/dist/local.js"
+        "/Users/abhinav/figma-claude-mcp/dist/local.js"
       ],
       "env": {
         "FIGMA_ACCESS_TOKEN": "YOUR_FIGMA_TOKEN"
