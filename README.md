@@ -176,6 +176,30 @@ Replace `YOUR_USERNAME` with your actual system username and `YOUR_FIGMA_TOKEN` 
 
 > **Tip:** The path in `args` must be the full absolute path to `dist/local.js`. Run `pwd` inside the `figma-console-mcp` folder to get it.
 
+Final code should look something like this (make sure {} are properly placed)
+
+```json
+{
+  "preferences": {
+    "coworkScheduledTasksEnabled": true,
+    "ccdScheduledTasksEnabled": true,
+    "coworkWebSearchEnabled": true,
+    "sidebarMode": "chat"
+  },
+  "mcpServers": {
+    "figma-console": {
+      "command": "node",
+      "args": [
+        "/Users/abhinav/Documents/Claude to Figma/figma-console-mcp/dist/local.js"
+      ],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "YOUR_FIGMA_TOKEN"
+      }
+    }
+  }
+}
+```
+
 ---
 
 ### Step 6 — Restart Claude Desktop
