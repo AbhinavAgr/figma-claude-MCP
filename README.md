@@ -308,6 +308,8 @@ Build a 3-step onboarding screen with a progress indicator at the top, an illust
 
 MIT — see [LICENSE](LICENSE) for details.
 
+For more visit [abhinavagr.com](https://abhinavagr.com/)
+
 ---
 
 > **Note:** This is a beginner-friendly adaptation of the [original Figma Console MCP repository](https://github.com/southleft/figma-console-mcp/tree/main?tab=readme-ov-file). I've simplified the setup guide and focused it on Claude Desktop so it's easier to get started. If you want the full documentation — including NPX setup, Cloud Mode, Remote SSE, and advanced options — visit the original repo.
